@@ -7,27 +7,28 @@ public enum ControlScheme { WASD, Arrows }
 
 public class Chara : MonoBehaviour
 {
-    private int player_id;
-    private Color player_color;
+    // Player Info
+    public int PlayerID { get; private set; }
+    public Color PlayerColor { get; private set; }
     private ControlScheme control_scheme;
 
+    // References
     private Rigidbody2D rb;
     public Transform graphics;
     public ParticleSystem bump_ps;
 
+    // Movement
+    private Vector2 start_pos;
+    private Vector2 prev_pos;
+    private float speed, normal_speed = 20f;
+
+    // Other State
     private bool chaser = false;
-    private bool frozen = false;
-    private bool live = false;
-    private Vector2 show_pos;
-    private List<Vector2> pos_history;
-
     private Power power = Power.None;
-    private float speed, normal_speed = 10f;
-
-    public Action<Chara> on_collide_chara;
-
-
-
+    
+    // Events
+    public Action<Chara, Chara> on_tag;
+    
 
     // PUBLIC ACCESSORS
 
@@ -35,32 +36,33 @@ public class Chara : MonoBehaviour
     {
         return chaser;
     }
-    public Color GetPlayerColor()
-    {
-        return player_color;
-    }
+
 
     // PUBLIC MODIFIERS
 
     public void Initialize(int id, ControlScheme controls, Color color)
     {
-        this.player_id = id;
-        this.player_color = color;
+        this.PlayerID = id;
+        this.PlayerColor = color;
         this.control_scheme = controls;
+
+        start_pos = transform.position;
+        Setup();
+
+        GameManager.Instance.on_reset += Setup;
     }
-    public void SetLive(bool live=true)
+    public void Setup()
     {
-        this.live = live;
-        graphics.transform.position = transform.position;
-        //if (live)
-        //{
-        //    pos_history.Clear();
-        //}
+        transform.position = start_pos;
+        graphics.gameObject.SetActive(true);
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0;
+        speed = normal_speed;
     }
     public void SetChaser()
     {
         chaser = true;
-        graphics.GetComponent<SpriteRenderer>().color = player_color;
+        graphics.GetComponent<SpriteRenderer>().color = PlayerColor;
     }
     public void SetRunner()
     {
@@ -74,46 +76,18 @@ public class Chara : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-
-        show_pos = transform.position;
-        pos_history = new List<Vector2>();
-
-        speed = normal_speed;
     }
     private void Update()
     {
-        if (frozen) return;
-
-        if (Input.GetKey(control_scheme == ControlScheme.Arrows ? KeyCode.RightShift : KeyCode.LeftShift))
-            SetLive(true);
-        else
-            SetLive(false);
-
-        if (live) show_pos = transform.position;
-        else
-        {
-            if (pos_history.Count > 0)
-            {
-                float seconds_back = 3; //Mathf.Sin(Time.time) + 1;
-                int i = Mathf.Max(0, pos_history.Count - 1 - (int)(seconds_back / Time.fixedDeltaTime));
-
-                show_pos = pos_history[i];
-            }
-            //Color c = graphics.GetComponent<SpriteRenderer>().color;
-            //graphics.GetComponent<SpriteRenderer>().color = Tools.SetColorAlpha(c, (5f-seconds_back) / 5f);
-        }
-
         if (GetInputPower()) UsePower();
-
-        graphics.transform.position = show_pos;
     }
     private void FixedUpdate()
     {
         Vector2 move_input = GetInputMove();
         Vector2 dir = move_input.normalized;
-        rb.MovePosition(rb.position + dir * speed * Time.fixedDeltaTime);
 
-        pos_history.Add(transform.position);
+        rb.AddForce(dir * speed, ForceMode2D.Force);
+        prev_pos = transform.position;
     }
 
     private void OnCollisionEnter2D(Collision2D col)
@@ -121,19 +95,14 @@ public class Chara : MonoBehaviour
         Chara other = col.collider.GetComponent<Chara>();
         if (other != null)
         {
-            if (on_collide_chara != null)
-                on_collide_chara(this);
-
             if (chaser)
             {
-                SetLive(true);
-            }
+                if (on_tag != null) on_tag(this, other);
+            } 
             else
             {
                 graphics.gameObject.SetActive(false);
             }
-
-            frozen = true;
         }
         else
         {
@@ -153,9 +122,6 @@ public class Chara : MonoBehaviour
     {
         if (power == Power.Dash)
         {
-            Vector2 dir = (Vector2)transform.position - pos_history[pos_history.Count - 1];
-            //transform.position = (Vector2)transform.position + dir * 20f;
-            //rb.MovePosition(rb.position + dir * 20f);
             StartCoroutine(Dash());
         }
         power = Power.None;
@@ -204,5 +170,4 @@ public class Chara : MonoBehaviour
         }
         return false;
     }
-
 }
