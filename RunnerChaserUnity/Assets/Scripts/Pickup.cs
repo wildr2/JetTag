@@ -7,7 +7,7 @@ public enum Power { None, Dash, Blink, Swap, Springs, Warp, Cloak, Repel }
 public class Pickup : MonoBehaviour
 {
     public Text name_text, icon_text;
-    public Power power = Power.Blink;
+    public Power power = Power.None;
 
 
     private void Awake()

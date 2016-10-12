@@ -26,6 +26,7 @@ public class Chara : MonoBehaviour
     private Vector2 start_pos;
     private Vector2 prev_pos;
     private float speed, normal_speed = 20f;
+    private Coroutine squash_routine;
 
     // Warp
     private float warp_secs = 1f;
@@ -128,9 +129,15 @@ public class Chara : MonoBehaviour
                 graphics.gameObject.SetActive(false);
             }
         }
-        else
+        else if (col.collider.CompareTag("Wall"))
         {
+            // Wall collision
+            bump_ps.Stop();
+            bump_ps.Clear();
             bump_ps.Play();
+
+            if (squash_routine != null) StopCoroutine(squash_routine);
+            squash_routine = StartCoroutine(Squash(col));
         }
     }
     private void OnTriggerEnter2D(Collider2D collider)
@@ -196,7 +203,7 @@ public class Chara : MonoBehaviour
         Chara opponent = GameManager.Instance.charas[1 - PlayerID];
         Vector2 v = opponent.transform.position - transform.position;
         float dist = Mathf.Max(radius * 2f, v.magnitude);
-        float force = 200f / Mathf.Pow(dist, 2);
+        float force = 200f / Mathf.Pow(dist, 1.5f);
         opponent.rb.AddForceAtPosition(v.normalized * force, transform.position, ForceMode2D.Impulse);
     }
     private void Warp()
@@ -218,6 +225,26 @@ public class Chara : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
 
         col.sharedMaterial = physmat_normal;
+    }
+
+    private IEnumerator Squash(Collision2D col)
+    {
+        graphics.rotation = Quaternion.Euler(0, 0, 
+            Mathf.Atan2(col.contacts[0].normal.y, col.contacts[0].normal.x) * Mathf.Rad2Deg + 90);
+
+        float amount = Mathf.Min(col.relativeVelocity.magnitude / 30f, 1) * 0.25f;
+
+        Vector2 scale = Vector2.one;
+        for (float t = 0; t < 1; t += Time.deltaTime * 8f)
+        {
+            scale.x = Mathf.Lerp(1 + amount, 1, t);
+            scale.y = 1 - (scale.x - 1);
+            graphics.transform.localScale = scale;
+
+            yield return null;
+        }
+
+        graphics.transform.localScale = Vector2.one;
     }
 
     private Vector2 GetInputMove()
