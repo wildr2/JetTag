@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public enum ControlScheme { WASD, Arrows }
+public enum ControlScheme { None, WASD, Arrows }
 
 public class Chara : MonoBehaviour
 {

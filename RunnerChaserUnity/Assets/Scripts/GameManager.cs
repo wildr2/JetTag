@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
         // Characters
         for (int i = 0; i < charas.Length; ++i)
         {
-            charas[i].Initialize(i, (ControlScheme)i, player_colors[i]);
+            charas[i].Initialize(i, (ControlScheme)i+1, player_colors[i]);
             charas[i].on_tag += OnTag;
         }
 
