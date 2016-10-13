@@ -27,7 +27,7 @@ public class DataManager : MonoBehaviour
     // Players
     public Color[] color_options;
     [System.NonSerialized] public ControlScheme[] player_controls;
-    [System.NonSerialized] public int[] player_color_ID = { 0, 0 };
+    [System.NonSerialized] public int[] player_color_ids = { 0, 0 };
     
 
     // PUBLIC ACCESSORS
@@ -40,7 +40,7 @@ public class DataManager : MonoBehaviour
     }
     public bool ValidColorChoices()
     {
-        return player_color_ID[0] != player_color_ID[1];
+        return player_color_ids[0] != player_color_ids[1];
     }
 
 
@@ -72,9 +72,9 @@ public class DataManager : MonoBehaviour
         player_controls[0] = ControlScheme.None;
         player_controls[1] = ControlScheme.None;
 
-        player_color_ID = new int[2];
-        player_color_ID[0] = Random.Range(0, color_options.Length);
-        player_color_ID[1] = Random.Range(0, color_options.Length);
+        player_color_ids = new int[2];
+        player_color_ids[0] = Random.Range(0, color_options.Length);
+        player_color_ids[1] = Random.Range(0, color_options.Length);
     }
 
 }

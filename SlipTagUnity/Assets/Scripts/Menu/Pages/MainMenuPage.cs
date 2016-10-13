@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class MainMenuPage : MenuPage
@@ -12,12 +13,38 @@ public class MainMenuPage : MenuPage
     private string controls_text_initial = "press start\n" + "or right shift\n" + "or left shift";
 
 
+    // PUBLIC MODIFIERS
+
+    public void OnButtonStart()
+    {
+        if (!dm.ValidColorChoices())
+        {
+            int player_id = Random.Range(0, 2);
+            dm.player_color_ids[player_id] = Random.Range(0, dm.color_options.Length);
+            if (!dm.ValidColorChoices())
+                dm.player_color_ids[player_id] = (dm.player_color_ids[player_id] + 1) % dm.color_options.Length;
+
+            UpdateBallColor(player_id);
+
+            return;
+        }
+
+        if (dm.ValidControlChoices())
+            SceneManager.LoadScene("Game");
+    }
+
+
+    // PRIVATE / PROTECTED MODIFIERS
+
     protected override void Awake()
     {
         base.Awake();
+    }
+    protected override void Start()
+    {
+        base.Start();
 
         dm = DataManager.Instance;
-
         for (int i = 0; i < 2; ++i)
         {
             UpdateControlsText(i);
@@ -80,17 +107,16 @@ public class MainMenuPage : MenuPage
 
     private void SwitchColor(int player_id, int index_change)
     {
-        int i = dm.player_color_ID[player_id];
+        int i = dm.player_color_ids[player_id];
         i = Tools.Mod(i + index_change, dm.color_options.Length);
-        dm.player_color_ID[player_id] = i;
+        dm.player_color_ids[player_id] = i;
 
         UpdateBallColor(player_id);
     }
     private void UpdateBallColor(int player_id)
     {
-        balls[player_id].color = dm.color_options[dm.player_color_ID[player_id]];
+        balls[player_id].color = dm.color_options[dm.player_color_ids[player_id]];
     }
-
 
     private KeyCode KeyStart(ControlScheme cs)
     {
@@ -119,5 +145,19 @@ public class MainMenuPage : MenuPage
             default: return KeyCode.None;
         }
     }
+
+    //private IEnumerator BeginMatch()
+    //{
+    //    SetOut();
+
+    //    //yield return new WaitForSeconds(0.4f);
+
+    //    //for (int i = 0; i < balls.Length; ++i)
+    //    //    balls[i].transform.parent.gameObject.SetActive(false);
+
+    //    //yield return new WaitForSeconds(0.4f);
+
+    //    SceneManager.LoadScene("Game");
+    //}
 
 }
