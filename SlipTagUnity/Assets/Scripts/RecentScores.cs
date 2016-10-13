@@ -23,7 +23,7 @@ public class RecentScores : MonoBehaviour
             MatchStats ms = dm.match_stats[i];
             string score;
             score = Tools.ColorRichTxt(ms.scores[0].ToString(), ms.colors[0]);
-            score += "-";
+            score += ":";
             score += Tools.ColorRichTxt(ms.scores[1].ToString(), ms.colors[1]);
             if (i > 0) score += "    ";
             text.text += score;

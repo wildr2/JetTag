@@ -7,6 +7,7 @@ public class PausePage : MenuPage
 {
     public PauseController pause_controller;
     public Image runner_img, chaser_img;
+    public Text runner_score_txt, chaser_score_txt;
 
     public override void SetIn()
     {
@@ -16,9 +17,22 @@ public class PausePage : MenuPage
         Chara chaser = gm.GetChaser();
         Chara runner = gm.GetRunner();
 
-        chaser_img.color = chaser.PlayerColor;
         chaser_img.transform.position = Camera.main.WorldToScreenPoint(chaser.transform.position);
         runner_img.transform.position = Camera.main.WorldToScreenPoint(runner.transform.position);
+
+        // Score
+        if (chaser.PlayerID == 0)
+        {
+            chaser_score_txt.rectTransform.localPosition = new Vector3(-500, 0, 0);
+            runner_score_txt.rectTransform.localPosition = new Vector3(500, 0, 0);
+        }
+        else
+        {
+            chaser_score_txt.rectTransform.localPosition = new Vector3(500, 0, 0);
+            runner_score_txt.rectTransform.localPosition = new Vector3(-500, 0, 0);
+        }
+        chaser_score_txt.text = gm.GetScores()[chaser.PlayerID].ToString();
+        runner_score_txt.text = gm.GetScores()[runner.PlayerID].ToString();
     }
 
     public void ButtonResume()

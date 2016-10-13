@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     public Action on_reset;
 
 
-	// PUBLIC ACCESSORS
+    // PUBLIC ACCESSORS
 
     public Chara GetChaser()
     {
@@ -41,23 +41,30 @@ public class GameManager : MonoBehaviour
     {
         return charas[0].IsChaser() ? charas[1] : charas[0];
     }
+    public int[] GetScores()
+    {
+        return scores;
+    }
 
 
     // PUBLIC MODIFIERS
 
     public void LoadGame()
     {
+        EndMatch();
         SceneManager.LoadScene("Game");
     }
     public void LoadMenu()
     {
-        // End match
+        EndMatch();
+        SceneManager.LoadScene("Menu");
+    }
+    public void EndMatch()
+    {
         MatchStats stats = new MatchStats();
         stats.colors = new Color[] { charas[0].PlayerColor, charas[1].PlayerColor };
         stats.scores = new int[] { scores[0], scores[1] };
         DataManager.Instance.match_stats.Add(stats);
-
-        SceneManager.LoadScene("Menu");
     }
 
 
@@ -137,10 +144,10 @@ public class GameManager : MonoBehaviour
     }
     private void OnTag(Chara tagger, Chara target)
     {
-        StartCoroutine(OnPointRoutine(tagger));
+        StartCoroutine(OnTagRoutine(tagger));
     }
 
-    private IEnumerator OnPointRoutine(Chara winner)
+    private IEnumerator OnTagRoutine(Chara winner)
     {
         StopCoroutine(rounds_coroutine);
 
@@ -149,13 +156,14 @@ public class GameManager : MonoBehaviour
 
         // Show UI
         Time.timeScale = 0;
-        match_ui.ShowPointScreen(winner, scores);
+        yield return null; // let collision adjustment happen
+        match_ui.ShowTagScreen(winner, scores);
 
         // Wait
         while (!Input.GetKeyDown(KeyCode.Space)) yield return null;
 
         // Hide UI
-        match_ui.HidePointScreen();
+        match_ui.HideTagScreen();
         Time.timeScale = 1;
 
         // Reset

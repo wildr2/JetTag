@@ -126,7 +126,8 @@ public class Chara : MonoBehaviour
             } 
             else
             {
-                graphics.gameObject.SetActive(false);
+                transform.position = (Vector2)other.transform.position 
+                    + col.contacts[0].normal * radius * 2f;
             }
         }
         else if (col.collider.CompareTag("Wall"))
