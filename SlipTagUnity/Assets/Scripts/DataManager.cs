@@ -26,9 +26,12 @@ public class DataManager : MonoBehaviour
 
     // Players
     public Color[] color_options;
-    [System.NonSerialized] public ControlScheme[] player_controls;
-    [System.NonSerialized] public int[] player_color_ids = { 0, 0 };
-    
+    public ControlScheme[] player_controls;
+    public int[] player_color_ids = { 0, 0 };
+
+    // Stats
+    public List<MatchStats> match_stats = new List<MatchStats>();
+
 
     // PUBLIC ACCESSORS
 
@@ -41,6 +44,11 @@ public class DataManager : MonoBehaviour
     public bool ValidColorChoices()
     {
         return player_color_ids[0] != player_color_ids[1];
+    }
+
+    public Color GetPlayerColor(int id)
+    {
+        return color_options[player_color_ids[id]];
     }
 
 
@@ -68,13 +76,29 @@ public class DataManager : MonoBehaviour
     }
     private void Initialize()
     {
-        player_controls = new ControlScheme[2];
-        player_controls[0] = ControlScheme.None;
-        player_controls[1] = ControlScheme.None;
-
-        player_color_ids = new int[2];
-        player_color_ids[0] = Random.Range(0, color_options.Length);
-        player_color_ids[1] = Random.Range(0, color_options.Length);
+        if (player_controls.Length != 2)
+        {
+            player_controls = new ControlScheme[2];
+            player_controls[0] = ControlScheme.None;
+            player_controls[1] = ControlScheme.None;
+        }
+        if (player_color_ids.Length != 2)
+        {
+            player_color_ids = new int[2];
+            player_color_ids[0] = Random.Range(0, color_options.Length);
+            player_color_ids[1] = Random.Range(0, color_options.Length);
+            if (!ValidColorChoices())
+            {
+                player_color_ids[0] = (player_color_ids[0] + 1) % color_options.Length;
+            }
+        }   
     }
 
+}
+
+
+public class MatchStats
+{
+    public Color[] colors;
+    public int[] scores;
 }

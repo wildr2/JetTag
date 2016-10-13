@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public Color[] player_colors;
     public Chara[] charas;
     public MatchUI match_ui;
 
@@ -49,10 +48,12 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
+        DataManager dm = DataManager.Instance;
+
         // Characters
         for (int i = 0; i < charas.Length; ++i)
         {
-            charas[i].Initialize(i, (ControlScheme)i+1, player_colors[i]);
+            charas[i].Initialize(i, dm.player_controls[i], dm.GetPlayerColor(i));
             charas[i].on_tag += OnTag;
         }
 
@@ -66,8 +67,14 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
+            // Quit to main menu
             Time.timeScale = 1;
             SceneManager.LoadScene(0);
+
+            MatchStats stats = new MatchStats();
+            stats.colors = new Color[] { charas[0].PlayerColor, charas[1].PlayerColor };
+            stats.scores = new int[] { scores[0], scores[1] };
+            DataManager.Instance.match_stats.Add(stats);
         }
     }
     private IEnumerator UpdateRounds()
