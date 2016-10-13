@@ -5,20 +5,24 @@ using System.Collections;
 public class MatchUI : MonoBehaviour
 {
     public Transform chase_screen;
-    public Image chase_arrow;
+    public Image chase_arrow, chase_runner, chase_chaser;
     public Image chase_background;
 
     public Transform point_screen;
     public Text point_text;
 
 
-    public void ShowChaseScreen(Color color, Transform agent)
+    public void ShowChaseScreen(Chara chaser, Chara runner)
     {
         chase_screen.gameObject.SetActive(true);
-        chase_background.color = color;
-        chase_arrow.transform.position = agent.transform.position / 1.5f;
+        chase_background.color = chaser.PlayerColor;
+        chase_arrow.transform.position = Camera.main.WorldToScreenPoint(runner.transform.position / 1.5f);
         chase_arrow.transform.rotation = Quaternion.Euler(0, 0, 
-            Mathf.Atan2(agent.transform.position.y, agent.transform.position.x) * Mathf.Rad2Deg);
+            Mathf.Atan2(runner.transform.position.y, runner.transform.position.x) * Mathf.Rad2Deg);
+
+        chase_chaser.color = chaser.PlayerColor;
+        chase_chaser.transform.position = Camera.main.WorldToScreenPoint(chaser.transform.position);
+        chase_runner.transform.position = Camera.main.WorldToScreenPoint(runner.transform.position);
     }
     public void HideChaseScreen()
     {

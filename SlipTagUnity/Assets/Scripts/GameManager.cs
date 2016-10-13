@@ -33,9 +33,35 @@ public class GameManager : MonoBehaviour
 
 	// PUBLIC ACCESSORS
 
-	// PUBLIC MODIFIERS
+    public Chara GetChaser()
+    {
+        return charas[0].IsChaser() ? charas[0] : charas[1];
+    }
+    public Chara GetRunner()
+    {
+        return charas[0].IsChaser() ? charas[1] : charas[0];
+    }
 
-	// PRIVATE / PROTECTED MODIFIERS
+
+    // PUBLIC MODIFIERS
+
+    public void LoadGame()
+    {
+        SceneManager.LoadScene("Game");
+    }
+    public void LoadMenu()
+    {
+        // End match
+        MatchStats stats = new MatchStats();
+        stats.colors = new Color[] { charas[0].PlayerColor, charas[1].PlayerColor };
+        stats.scores = new int[] { scores[0], scores[1] };
+        DataManager.Instance.match_stats.Add(stats);
+
+        SceneManager.LoadScene("Menu");
+    }
+
+
+    // PRIVATE / PROTECTED MODIFIERS
 
     private void Awake()
     {
@@ -65,17 +91,21 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            // Quit to main menu
-            Time.timeScale = 1;
-            SceneManager.LoadScene(0);
+        //if (Input.GetKeyDown(KeyCode.Backspace))
+        //{
+        //    // Quit to main menu
+        //    Time.timeScale = 1;
+        //    SceneManager.LoadScene(0);
 
-            MatchStats stats = new MatchStats();
-            stats.colors = new Color[] { charas[0].PlayerColor, charas[1].PlayerColor };
-            stats.scores = new int[] { scores[0], scores[1] };
-            DataManager.Instance.match_stats.Add(stats);
-        }
+        //    MatchStats stats = new MatchStats();
+        //    stats.colors = new Color[] { charas[0].PlayerColor, charas[1].PlayerColor };
+        //    stats.scores = new int[] { scores[0], scores[1] };
+        //    DataManager.Instance.match_stats.Add(stats);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //{
+        //    pause_page.SetIn();
+        //}
     }
     private IEnumerator UpdateRounds()
     {
@@ -91,7 +121,7 @@ public class GameManager : MonoBehaviour
 
             // Flash color
             Time.timeScale = 0;
-            match_ui.ShowChaseScreen(charas[chaser_i].PlayerColor, charas[1 - chaser_i].transform);
+            match_ui.ShowChaseScreen(charas[chaser_i], charas[1 - chaser_i]);
             yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(0.5f));
             match_ui.HideChaseScreen();
             Time.timeScale = 1;

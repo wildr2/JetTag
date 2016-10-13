@@ -16,6 +16,10 @@ public class ButtonEffects : ButtonEvents
     protected override void OnClick()
     {
         base.OnClick();
+        if (text != null)
+        {
+            text.text = label;
+        }
     }
     protected override void OnSelect()
     {
