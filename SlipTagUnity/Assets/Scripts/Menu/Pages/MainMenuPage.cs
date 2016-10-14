@@ -7,10 +7,11 @@ public class MainMenuPage : MenuPage
 {
     public Image[] balls;
     public Text[] controls_text;
+    private string controls_text_initial = "press start\n" + "or right shift\n" + "or left shift";
+    private ControlScheme[] human_controls = new ControlScheme[]
+    { ControlScheme.Arrows, ControlScheme.WASD, ControlScheme.Gamepad1, ControlScheme.Gamepad2 };
 
     private DataManager dm;
-
-    private string controls_text_initial = "press start\n" + "or right shift\n" + "or left shift";
 
 
     // PUBLIC MODIFIERS
@@ -56,38 +57,37 @@ public class MainMenuPage : MenuPage
         base.Update();
 
         // Controls start
-        foreach (ControlScheme cs in Tools.EnumValues(typeof(ControlScheme)))
+        foreach (ControlScheme cs in human_controls)
         {
-            if (Input.GetKeyDown(KeyStart(cs)))
-                OnControlsStart(cs);
+            if (InputExt.GetKeyDownCS(cs, Control.Start))
+                OnInputStart(cs);
         }
 
         // Color switching
-        for (int i = 0; i < dm.player_controls.Length; ++i)
+        for (int i = 0; i < 2; ++i)
         {
-            if (Input.GetKeyDown(KeyLeft(dm.player_controls[i]))) SwitchColor(i, -1);
-            if (Input.GetKeyDown(KeyRight(dm.player_controls[i]))) SwitchColor(i, 1);
+            SwitchColor(i, InputExt.GetAxisInt(i, Control.X, true));
         }
     }
-    private void OnControlsStart(ControlScheme cs)
+    private void OnInputStart(ControlScheme cs)
     {
-        // Expty slot already with this cs
-        for (int i = 0; i < dm.player_controls.Length; ++i)
+        // Slot already with this cs
+        for (int i = 0; i < 2; ++i)
         {
-            if (dm.player_controls[i] == cs)
+            if ((ControlScheme)InputExt.GetPlayerScheme(i) == cs)
             {
-                dm.player_controls[i] = ControlScheme.None;
+                InputExt.SetPlayerControlScheme(i, ControlScheme.None);
                 UpdateControlsText(i);
                 return;
             }
         }
 
         // Assign cs to empty slot
-        for (int i = 0; i < dm.player_controls.Length; ++i)
+        for (int i = 0; i < 2; ++i)
         {
-            if (dm.player_controls[i] == ControlScheme.None)
+            if ((ControlScheme)InputExt.GetPlayerScheme(i) == ControlScheme.None)
             {
-                dm.player_controls[i] = cs;
+                InputExt.SetPlayerControlScheme(i, cs);
                 UpdateControlsText(i);
                 return;
             }
@@ -95,13 +95,13 @@ public class MainMenuPage : MenuPage
     }
     private void UpdateControlsText(int player_id)
     {
-        if (dm.player_controls[player_id] == ControlScheme.None)
+        if ((ControlScheme)InputExt.GetPlayerScheme(player_id) == ControlScheme.None)
         {
             controls_text[player_id].text = controls_text_initial;
         }
         else
         {
-            controls_text[player_id].text = dm.player_controls[player_id].ToString();
+            controls_text[player_id].text = InputExt.GetPlayerScheme(player_id).ToString();
         }
     }
 
@@ -117,47 +117,5 @@ public class MainMenuPage : MenuPage
     {
         balls[player_id].color = dm.color_options[dm.player_color_ids[player_id]];
     }
-
-    private KeyCode KeyStart(ControlScheme cs)
-    {
-        switch (cs)
-        {
-            case ControlScheme.Arrows: return KeyCode.RightShift;
-            case ControlScheme.WASD: return KeyCode.LeftShift;
-            default: return KeyCode.None;
-        }
-    }
-    private KeyCode KeyLeft(ControlScheme cs)
-    {
-        switch (cs)
-        {
-            case ControlScheme.Arrows: return KeyCode.LeftArrow;
-            case ControlScheme.WASD: return KeyCode.A;
-            default: return KeyCode.None;
-        }
-    }
-    private KeyCode KeyRight(ControlScheme cs)
-    {
-        switch (cs)
-        {
-            case ControlScheme.Arrows: return KeyCode.RightArrow;
-            case ControlScheme.WASD: return KeyCode.D;
-            default: return KeyCode.None;
-        }
-    }
-
-    //private IEnumerator BeginMatch()
-    //{
-    //    SetOut();
-
-    //    //yield return new WaitForSeconds(0.4f);
-
-    //    //for (int i = 0; i < balls.Length; ++i)
-    //    //    balls[i].transform.parent.gameObject.SetActive(false);
-
-    //    //yield return new WaitForSeconds(0.4f);
-
-    //    SceneManager.LoadScene("Game");
-    //}
 
 }

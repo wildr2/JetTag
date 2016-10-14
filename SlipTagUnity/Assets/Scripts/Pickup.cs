@@ -30,10 +30,10 @@ public class Pickup : MonoBehaviour
         StartCoroutine(RespawnRoutine());
 
         // Name text
-        KeyCode kc = c.GetActionKeyCode();
-        string kc_name = kc.ToString();
-        if (kc == KeyCode.Slash) kc_name = "/";
-        name_text.text = power.ToString().ToLower() + " [" + kc_name + "]";
+        //KeyCode kc = c.GetActionKeyCode();
+        //string kc_name = kc.ToString();
+        //if (kc == KeyCode.Slash) kc_name = "/";
+        name_text.text = power.ToString().ToLower() + " [" + "O.O" + "]";
 
         for (int i = 0; i < 5; ++i)
         {

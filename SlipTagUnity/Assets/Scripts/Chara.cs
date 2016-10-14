@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public enum ControlScheme { None, WASD, Arrows, Gamepad, AI }
-
 public class Chara : MonoBehaviour
 {
     // Debug
@@ -13,7 +11,6 @@ public class Chara : MonoBehaviour
     // Player Info
     public int PlayerID { get; private set; }
     public Color PlayerColor { get; private set; }
-    private ControlScheme control_scheme;
 
     // References
     private Rigidbody2D rb;
@@ -34,7 +31,7 @@ public class Chara : MonoBehaviour
 
     // Other State
     private bool chaser = false;
-    private Power power = Power.Warp;
+    private Power power = Power.None;
     
     // Events
     public Action<Chara, Chara> on_tag;
@@ -46,21 +43,14 @@ public class Chara : MonoBehaviour
     {
         return chaser;
     }
-    public KeyCode GetActionKeyCode()
-    {
-        return 
-            control_scheme == ControlScheme.Arrows ? KeyCode.Slash :
-            control_scheme == ControlScheme.WASD ? KeyCode.Q : KeyCode.None;
-    }
 
 
     // PUBLIC MODIFIERS
 
-    public void Initialize(int id, ControlScheme controls, Color color)
+    public void Initialize(int id, Color color)
     {
         this.PlayerID = id;
         this.PlayerColor = color;
-        this.control_scheme = controls;
 
         start_pos = transform.position;
         Setup();
@@ -98,11 +88,15 @@ public class Chara : MonoBehaviour
     }
     private void Update()
     {
-        if (Time.timeScale > 0 && GetInputPower()) UsePower();
+        if (Time.timeScale > 0 && InputExt.GetKeyDown(PlayerID, Control.Action))
+            UsePower();
     }
     private void FixedUpdate()
     {
-        Vector2 move_input = GetInputMove();
+        Vector2 move_input = new Vector2(
+            InputExt.GetAxis(PlayerID, Control.X),
+            InputExt.GetAxis(PlayerID, Control.Y));
+
         Vector2 dir = move_input.normalized;
 
         rb.AddForce(dir * speed, ForceMode2D.Force);
@@ -246,36 +240,5 @@ public class Chara : MonoBehaviour
         }
 
         graphics.transform.localScale = Vector2.one;
-    }
-
-    private Vector2 GetInputMove()
-    {
-        bool left=false, right=false, up=false, down=false;
-
-        switch (control_scheme)
-        {
-            case ControlScheme.Arrows:
-                left = Input.GetKey(KeyCode.LeftArrow);
-                right = Input.GetKey(KeyCode.RightArrow);
-                up = Input.GetKey(KeyCode.UpArrow);
-                down = Input.GetKey(KeyCode.DownArrow);
-                break;
-            case ControlScheme.WASD:
-                left = Input.GetKey(KeyCode.A);
-                right = Input.GetKey(KeyCode.D);
-                up = Input.GetKey(KeyCode.W);
-                down = Input.GetKey(KeyCode.S);
-                break;
-        }
-
-        Vector2 input = new Vector2();
-        input.x = Convert.ToInt32(right) - Convert.ToInt32(left);
-        input.y = Convert.ToInt32(up) - Convert.ToInt32(down);
-
-        return input;
-    }
-    private bool GetInputPower()
-    {
-        return Input.GetKeyDown(GetActionKeyCode());
     }
 }

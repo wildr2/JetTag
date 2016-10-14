@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
         // Characters
         for (int i = 0; i < charas.Length; ++i)
         {
-            charas[i].Initialize(i, dm.player_controls[i], dm.GetPlayerColor(i));
+            charas[i].Initialize(i, dm.GetPlayerColor(i));
             charas[i].on_tag += OnTag;
         }
 
