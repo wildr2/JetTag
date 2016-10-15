@@ -28,6 +28,7 @@ public class DataManager : MonoBehaviour
         }
     }
 
+
     // Players
     public Color[] color_options;
     public int[] player_color_ids = { 0, 0 };
@@ -52,6 +53,7 @@ public class DataManager : MonoBehaviour
     {
         return color_options[player_color_ids[id]];
     }
+
 
 
     // PUBLIC MODIFIERS

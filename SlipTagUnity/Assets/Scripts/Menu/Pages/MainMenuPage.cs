@@ -66,7 +66,7 @@ public class MainMenuPage : MenuPage
         // Color switching
         for (int i = 0; i < 2; ++i)
         {
-            SwitchColor(i, InputExt.GetAxisInt(i, Control.X, true));
+            SwitchColor(i, InputExt.GetAxisOnce(i, Control.X, true));
         }
     }
     private void OnInputStart(ControlScheme cs)
