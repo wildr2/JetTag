@@ -30,10 +30,10 @@ public class Pickup : MonoBehaviour
         StartCoroutine(RespawnRoutine());
 
         // Name text
-        //KeyCode kc = c.GetActionKeyCode();
-        //string kc_name = kc.ToString();
-        //if (kc == KeyCode.Slash) kc_name = "/";
-        name_text.text = power.ToString().ToLower() + " [" + "O.O" + "]";
+        ControlScheme cs = (ControlScheme)InputExt.GetPlayerScheme(c.PlayerID);
+        string key_name = InputExt.GetControlName(cs, Control.Action);
+        name_text.text = power.ToString().ToLower();
+        if (key_name != "") name_text.text += "[" + key_name + "]";
 
         for (int i = 0; i < 5; ++i)
         {

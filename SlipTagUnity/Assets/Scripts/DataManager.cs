@@ -95,23 +95,23 @@ public class DataManager : MonoBehaviour
 
         InputExt.AddAxis(ControlScheme.WASD, Control.X, KeyCode.A, KeyCode.D);
         InputExt.AddAxis(ControlScheme.WASD, Control.Y, KeyCode.S, KeyCode.W);
-        InputExt.AddKey(ControlScheme.WASD, Control.Action, KeyCode.LeftShift);
+        InputExt.AddKey(ControlScheme.WASD, Control.Action, KeyCode.LeftShift, "L.Shift");
         InputExt.AddKey(ControlScheme.WASD, Control.Start, KeyCode.LeftShift);
 
         InputExt.AddAxis(ControlScheme.Arrows, Control.X, KeyCode.LeftArrow, KeyCode.RightArrow);
         InputExt.AddAxis(ControlScheme.Arrows, Control.Y, KeyCode.DownArrow, KeyCode.UpArrow);
-        InputExt.AddKey(ControlScheme.Arrows, Control.Action, KeyCode.RightShift);
+        InputExt.AddKey(ControlScheme.Arrows, Control.Action, KeyCode.RightShift, "R.Shift");
         InputExt.AddKey(ControlScheme.Arrows, Control.Start, KeyCode.RightShift);
 
         InputExt.AddAxis(ControlScheme.Gamepad1, Control.X, "GP1_Horizontal");
         InputExt.AddAxis(ControlScheme.Gamepad1, Control.Y, "GP1_Vertical");
-        InputExt.AddKey(ControlScheme.Gamepad1, Control.Action, KeyCode.Joystick1Button0);
+        InputExt.AddKey(ControlScheme.Gamepad1, Control.Action, KeyCode.Joystick1Button0, "A");
         InputExt.AddKey(ControlScheme.Gamepad1, Control.Action, () => Input.GetAxis("GP1_Triggers") != 0);
         InputExt.AddKey(ControlScheme.Gamepad1, Control.Start, KeyCode.Joystick1Button7);
 
         InputExt.AddAxis(ControlScheme.Gamepad2, Control.X, "GP2_Horizontal");
         InputExt.AddAxis(ControlScheme.Gamepad2, Control.Y, "GP2_Vertical");
-        InputExt.AddKey(ControlScheme.Gamepad2, Control.Action, KeyCode.Joystick2Button0);
+        InputExt.AddKey(ControlScheme.Gamepad2, Control.Action, KeyCode.Joystick2Button0, "A");
         InputExt.AddKey(ControlScheme.Gamepad2, Control.Action, () => Input.GetAxis("GP2_Triggers") != 0);
         InputExt.AddKey(ControlScheme.Gamepad2, Control.Start, KeyCode.Joystick2Button7);
     }
