@@ -14,53 +14,31 @@ Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\
 Loading C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
 Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
 Loading C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.039 seconds
+- Completed reload, in  0.108 seconds
 Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
-<RI.Hid> Failed to create device file:
- 2 The system cannot find the file specified.
-
- 
-(Filename:  Line: 54)
-
-<RI> Input initialized.
-Initialize engine version: 5.4.1f1 (649f48bbbf0f)
-GfxDevice: creating device client; threaded=1
-Direct3D:
-    Version:  Direct3D 11.0 [level 11.0]
-    Renderer: NVIDIA GeForce GTX 970 (ID=0x13c2)
-    Vendor:   NVIDIA
-    VRAM:     3072 MB
-Begin MonoManager ReloadAssembly
-Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.UI.dll (this message is harmless)
-Loading C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
-Loading C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
-- Completed reload, in  0.035 seconds
-Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\System.dll (this message is harmless)
-desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
-<RI> Initializing input.
-<RI.Hid> Failed to create device file:
- 2 The system cannot find the file specified.
-
- 
-(Filename:  Line: 54)
-
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 0.540106 ms
+UnloadTime: 0.569674 ms
 Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 2.071432 ms
+UnloadTime: 2.262305 ms
 
 Unloading 6 unused Assets to reduce memory usage. Loaded Objects now: 430.
-Total: 0.252927 ms (FindLiveObjects: 0.015515 ms CreateObjectMapping: 0.014929 ms MarkObjects: 0.213700 ms  DeleteObjects: 0.008489 ms)
+Total: 0.259368 ms (FindLiveObjects: 0.032494 ms CreateObjectMapping: 0.013758 ms MarkObjects: 0.206089 ms  DeleteObjects: 0.007025 ms)
+
+Unloading 2 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.436770 ms
+
+Unloading 6 unused Assets to reduce memory usage. Loaded Objects now: 327.
+Total: 0.322600 ms (FindLiveObjects: 0.035421 ms CreateObjectMapping: 0.019906 ms MarkObjects: 0.258783 ms  DeleteObjects: 0.007904 ms)
+
+Unloading 3 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 0.430622 ms
+
+Unloading 4 unused Assets to reduce memory usage. Loaded Objects now: 430.
+Total: 0.265516 ms (FindLiveObjects: 0.040105 ms CreateObjectMapping: 0.010245 ms MarkObjects: 0.207846 ms  DeleteObjects: 0.007025 ms)
 
 Setting up 1 worker threads for Enlighten.
-  Thread -> id: 382c -> priority: 1 
+  Thread -> id: c84 -> priority: 1 

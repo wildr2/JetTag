@@ -32,6 +32,7 @@ public class DataManager : MonoBehaviour
     // Players
     public Color[] color_options;
     public int[] player_color_ids = { 0, 0 };
+    public ControlScheme[] initial_control_schemes;
 
     // Stats
     public List<MatchStats> match_stats = new List<MatchStats>();
@@ -92,6 +93,11 @@ public class DataManager : MonoBehaviour
 
         // Controls
         InputExt.RegisterPlayers(2, ControlScheme.None);
+        for (int i = 0; i < 2; ++i)
+        {
+            if (i < initial_control_schemes.Length)
+                InputExt.SetPlayerControlScheme(i, initial_control_schemes[i]);
+        }
 
         InputExt.AddAxis(ControlScheme.WASD, Control.X, KeyCode.A, KeyCode.D);
         InputExt.AddAxis(ControlScheme.WASD, Control.Y, KeyCode.S, KeyCode.W);

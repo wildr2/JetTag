@@ -22,7 +22,7 @@ public class MatchUI : MonoBehaviour
 
         // Arrow
         Vector2 dif = runner.transform.position - chaser.transform.position;
-        Vector2 pos = (Vector2)runner.transform.position + dif * 0.5f;
+        Vector2 pos = (Vector2)runner.transform.position - dif * 0.25f;
 
         chase_arrow.transform.position = Camera.main.WorldToScreenPoint(pos);
         chase_arrow.transform.rotation = Quaternion.Euler(0, 0, 

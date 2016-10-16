@@ -19,6 +19,7 @@ public class InputExt : MonoBehaviour
                 else
                 {
                     DontDestroyOnLoad(_instance);
+                    _instance.Initialize();
                 }
             }
             return _instance;
@@ -247,7 +248,7 @@ public class InputExt : MonoBehaviour
 
     // PRIVATE MODIFIERS
 
-    private void Awake()
+    private void Initialize()
     {
         controls = new Dictionary<IConvertible, Dictionary<IConvertible, List<Entry>>>();
         control_names = new Dictionary<IConvertible, Dictionary<IConvertible, string>>();
