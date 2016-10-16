@@ -56,17 +56,20 @@ public class MainMenuPage : MenuPage
     {
         base.Update();
 
-        // Controls start
-        foreach (ControlScheme cs in human_controls)
+        if (IsInteractable())
         {
-            if (InputExt.GetKeyDownCS(cs, Control.Start))
-                OnInputStart(cs);
-        }
+            // Controls start
+            foreach (ControlScheme cs in human_controls)
+            {
+                if (InputExt.GetKeyDownCS(cs, Control.Start))
+                    OnInputStart(cs);
+            }
 
-        // Color switching
-        for (int i = 0; i < 2; ++i)
-        {
-            SwitchColor(i, InputExt.GetAxisOnce(i, Control.X, true));
+            // Color switching
+            for (int i = 0; i < 2; ++i)
+            {
+                SwitchColor(i, InputExt.GetAxisOnce(i, Control.X, true));
+            }
         }
     }
     private void OnInputStart(ControlScheme cs)
@@ -107,6 +110,9 @@ public class MainMenuPage : MenuPage
 
     private void SwitchColor(int player_id, int index_change)
     {
+        if (index_change == 0) return;
+        Tools.Log(index_change);
+
         int i = dm.player_color_ids[player_id];
         i = Tools.Mod(i + index_change, dm.color_options.Length);
         dm.player_color_ids[player_id] = i;
