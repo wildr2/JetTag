@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
         match_ui.ShowTagScreen(winner, scores);
 
         // Wait
-        while (!Input.GetKeyDown(KeyCode.Space)) yield return null;
+        while (!InputExt.GetKeyDown(winner.PlayerID, Control.Action)) yield return null;
 
         // Hide UI
         match_ui.HideTagScreen();

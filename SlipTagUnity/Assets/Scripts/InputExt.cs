@@ -225,7 +225,12 @@ public class InputExt : MonoBehaviour
     //{
     //    return KeyCode.None;
     //}
-    public static string GetControlName(IConvertible control_scheme, IConvertible control)
+    public static string GetControlName(int id, IConvertible control)
+    {
+        if (!I.CheckPlayerIdValid(id)) return "";
+        return GetControlNameCS(I.player_control_schemes[id], control);
+    }
+    public static string GetControlNameCS(IConvertible control_scheme, IConvertible control)
     {
         Dictionary<IConvertible, string> d;
         if (I.control_names.TryGetValue(control_scheme, out d))
@@ -237,7 +242,7 @@ public class InputExt : MonoBehaviour
             }
         }
 
-         return "";
+        return "";
     }
     public static IConvertible GetPlayerScheme(int id)
     {

@@ -10,7 +10,7 @@ public class MatchUI : MonoBehaviour
 
     public Transform tag_screen;
     public Image tag_runner, tag_chaser;
-    public Text tag_text;
+    public Text tag_text, tag_continue_text;
 
     public Text runner_score_txt, chaser_score_txt;
 
@@ -44,7 +44,6 @@ public class MatchUI : MonoBehaviour
         Chara chaser = gm.GetChaser();
         Chara runner = gm.GetRunner();
 
-
         tag_screen.gameObject.SetActive(true);
         tag_text.color = chaser.PlayerColor;
 
@@ -66,6 +65,10 @@ public class MatchUI : MonoBehaviour
         chaser_score_txt.color = chaser.PlayerColor;
         chaser_score_txt.text = gm.GetScores()[chaser.PlayerID].ToString();
         runner_score_txt.text = gm.GetScores()[runner.PlayerID].ToString();
+
+        // Continue text
+        tag_continue_text.color = winner.PlayerColor;
+        tag_continue_text.text = "press " + InputExt.GetControlName(winner.PlayerID, Control.Action);
     }
     public void HideTagScreen()
     {

@@ -30,9 +30,8 @@ public class Pickup : MonoBehaviour
         StartCoroutine(RespawnRoutine());
 
         // Name text
-        ControlScheme cs = (ControlScheme)InputExt.GetPlayerScheme(c.PlayerID);
-        string key_name = InputExt.GetControlName(cs, Control.Action).ToLower();
-        name_text.text = power.ToString().ToUpper();
+        string key_name = InputExt.GetControlName(c.PlayerID, Control.Action);
+        name_text.text = power.ToString();
         if (key_name != "") name_text.text += " [" + key_name + "]";
 
         for (int i = 0; i < 5; ++i)
