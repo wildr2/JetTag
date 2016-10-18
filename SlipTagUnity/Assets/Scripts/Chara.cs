@@ -16,6 +16,7 @@ public class Chara : MonoBehaviour
     private Rigidbody2D rb;
     public Transform graphics;
     public ParticleSystem bump_ps;
+    private CameraShake camshake;
 
     // Movement
     public PhysicsMaterial2D physmat_normal, physmat_springs;
@@ -97,6 +98,7 @@ public class Chara : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         waypoints = FindObjectOfType<Waypoints>();
+        camshake = Camera.main.GetComponent<CameraShake>();
     }
     private IEnumerator UpdateHuman()
     {
@@ -177,12 +179,20 @@ public class Chara : MonoBehaviour
         else if (col.collider.CompareTag("Wall"))
         {
             // Wall collision
+
+            // Particles
             bump_ps.Stop();
             bump_ps.Clear();
             bump_ps.Play();
 
+            // Squash
             if (squash_routine != null) StopCoroutine(squash_routine);
             squash_routine = StartCoroutine(Squash(col));
+
+            // Cam shake
+            float i = Mathf.Pow(Mathf.Min(col.relativeVelocity.magnitude / 30f, 1), 4);
+            i *= i;
+            camshake.Shake(Mathf.Lerp(0.05f, 0.1f, i), Mathf.Lerp(0, 0.5f, i), 1);
         }
     }
     private void OnTriggerEnter2D(Collider2D collider)
@@ -191,6 +201,8 @@ public class Chara : MonoBehaviour
         if (pu != null)
         {
             power = pu.power;
+            camshake.FreezeFrames(4);
+            camshake.Shake(0.1f, 3, 1);
         }
     }
 
