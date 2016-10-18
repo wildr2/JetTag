@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     public Chara[] charas;
     public MatchUI match_ui;
+    private static UID ui_timescale_id = new UID();
 
     private Coroutine rounds_coroutine;
     private float round_start_time;
@@ -96,24 +97,6 @@ public class GameManager : MonoBehaviour
         // Rounds
         rounds_coroutine = StartCoroutine(UpdateRounds());
     }
-    private void Update()
-    {
-        //if (Input.GetKeyDown(KeyCode.Backspace))
-        //{
-        //    // Quit to main menu
-        //    Time.timeScale = 1;
-        //    SceneManager.LoadScene(0);
-
-        //    MatchStats stats = new MatchStats();
-        //    stats.colors = new Color[] { charas[0].PlayerColor, charas[1].PlayerColor };
-        //    stats.scores = new int[] { scores[0], scores[1] };
-        //    DataManager.Instance.match_stats.Add(stats);
-        //}
-        //if (Input.GetKeyDown(KeyCode.Escape))
-        //{
-        //    pause_page.SetIn();
-        //}
-    }
     private IEnumerator UpdateRounds()
     {
         int chaser_i = round_num % charas.Length;
@@ -127,11 +110,11 @@ public class GameManager : MonoBehaviour
             }
 
             // Flash color
-            Time.timeScale = 0;
+            TimeScaleManager.SetFactor(0, ui_timescale_id);
             match_ui.ShowChaseScreen(charas[chaser_i], charas[1 - chaser_i]);
             yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(0.5f));
             match_ui.HideChaseScreen();
-            Time.timeScale = 1;
+            TimeScaleManager.SetFactor(1, ui_timescale_id);
 
             // Wait for round end
             round_start_time = Time.time;
@@ -155,7 +138,7 @@ public class GameManager : MonoBehaviour
         ++scores[winner.PlayerID];
 
         // Show UI
-        Time.timeScale = 0;
+        TimeScaleManager.SetFactor(0, ui_timescale_id);
         yield return null; // let collision adjustment happen
         match_ui.ShowTagScreen(winner, scores);
 
@@ -167,7 +150,7 @@ public class GameManager : MonoBehaviour
 
         // Hide UI
         match_ui.HideTagScreen();
-        Time.timeScale = 1;
+        TimeScaleManager.SetFactor(1, ui_timescale_id);
 
         // Reset
         if (on_reset != null) on_reset();

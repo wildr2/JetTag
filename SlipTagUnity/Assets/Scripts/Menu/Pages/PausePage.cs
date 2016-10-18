@@ -50,14 +50,10 @@ public class PausePage : MenuPage
 
     private void LoadGame()
     {
-        //pause_controller.UnPause();
-        Time.timeScale = 1;
         GameManager.Instance.LoadGame();
     }
     private void LoadMainMenu()
     {
-        //pause_controller.UnPause();
-        Time.timeScale = 1;
         GameManager.Instance.LoadMenu();
     }
 }

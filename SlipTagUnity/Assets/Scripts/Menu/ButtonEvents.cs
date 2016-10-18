@@ -13,7 +13,6 @@ public class ButtonEvents : MonoBehaviour
             PageManager pm = page.GetManager();
             if (pm != null)
             {
-                EventSystem esys = pm.GetEventSystem();
                 EventTrigger trigger = GetComponent<EventTrigger>();
 
                 // Click 
@@ -51,7 +50,6 @@ public class ButtonEvents : MonoBehaviour
                 deselect_key.eventID = EventTriggerType.Deselect;
                 deselect_key.callback.AddListener((eventData) => { OnDeselect(); });
                 trigger.triggers.Add(deselect_key);
-
             }
         }
     }

@@ -6,7 +6,7 @@ public class PauseController : MonoBehaviour
     public MenuPage pause_page;
     public AudioSource pause_sound, resume_sound;
     private bool paused = false;
-    //private static UID timescale_id = new UID();
+    private static UID timescale_id = new UID();
 
 
     public bool IsPaused()
@@ -31,16 +31,14 @@ public class PauseController : MonoBehaviour
     public void Pause()
     {
         paused = true;
-        //TimeScaleManager.Instance.SetFactor(0, timescale_id);
-        Time.timeScale = 0;
+        TimeScaleManager.SetFactor(0, timescale_id);
         pause_page.SetIn();
         if (pause_sound != null) pause_sound.Play();
     }
     public void UnPause()
     {
         paused = false;
-        //TimeScaleManager.Instance.SetFactor(1, timescale_id);
-        Time.timeScale = 1;
+        TimeScaleManager.SetFactor(1, timescale_id);
         pause_page.SetOut();
         if (resume_sound != null) resume_sound.Play();
     }
