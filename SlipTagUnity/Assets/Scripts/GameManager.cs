@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 
+public enum CamShakeType { Strong, StrongNoF }
+
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
@@ -83,6 +85,11 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         DataManager dm = DataManager.Instance;
+
+        // Cam Shake
+        CameraShake camshake = Camera.main.GetComponent<CameraShake>();
+        camshake.DefineShakeType(CamShakeType.Strong, new CamShakeParams(0.1f, 3, 1, 4));
+        camshake.DefineShakeType(CamShakeType.StrongNoF, new CamShakeParams(0.15f, 4, 1, 0));
 
         // Characters
         for (int i = 0; i < charas.Length; ++i)

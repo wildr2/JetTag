@@ -29,12 +29,12 @@ public class Chara : MonoBehaviour
     private Waypoints waypoints;
 
     // Warp
-    private float warp_secs = 1f;
+    private float warp_secs = 1.5f;
     private Queue<Vector2> pos_history, velocity_history;
 
     // Other State
     private bool chaser = false;
-    private Power power = Power.None;
+    private Power power = Power.Dash;
 
     // Events
     public Action<Chara, Chara> on_tag;
@@ -201,13 +201,14 @@ public class Chara : MonoBehaviour
         if (pu != null)
         {
             power = pu.power;
-            camshake.FreezeFrames(4);
-            camshake.Shake(0.1f, 3, 1);
+            camshake.Shake(CamShakeType.Strong);
         }
     }
 
     private void UsePower()
     {
+        if (power == Power.None) return;
+
         if (power == Power.Dash) StartCoroutine(Dash());
         else if (power == Power.Blink) Blink();
         else if (power == Power.Cloak) StartCoroutine(Cloak());
@@ -220,6 +221,7 @@ public class Chara : MonoBehaviour
     }
     private IEnumerator Dash()
     {
+        camshake.Shake(CamShakeType.StrongNoF);
         speed = normal_speed * 5f;
         yield return new WaitForSeconds(0.25f);
         speed = normal_speed;
@@ -246,7 +248,8 @@ public class Chara : MonoBehaviour
             transform.position = pos;
             //rb.velocity = dir * rb.velocity.magnitude;
         }
-        
+
+        camshake.Shake(CamShakeType.Strong);
     }
     private void Swap()
     {
@@ -254,6 +257,8 @@ public class Chara : MonoBehaviour
         Vector2 pos = transform.position;
         transform.position = opponent.transform.position;
         opponent.transform.position = pos;
+
+        camshake.Shake(CamShakeType.Strong);
     }
     private void Repel()
     {
@@ -262,14 +267,19 @@ public class Chara : MonoBehaviour
         float dist = Mathf.Max(radius * 2f, v.magnitude);
         float force = 200f / Mathf.Pow(dist, 1.5f);
         opponent.rb.AddForceAtPosition(v.normalized * force, transform.position, ForceMode2D.Impulse);
+
+        camshake.Shake(CamShakeType.Strong);
     }
     private void Warp()
     {
         transform.position = pos_history.Peek();
         rb.velocity = velocity_history.Peek();
+
+        camshake.Shake(CamShakeType.Strong);
     }
     public IEnumerator Cloak()
     {
+        camshake.Shake(CamShakeType.Strong);
         graphics.gameObject.SetActive(false);
         yield return new WaitForSeconds(3);
         graphics.gameObject.SetActive(true);
@@ -278,6 +288,7 @@ public class Chara : MonoBehaviour
     {
         Collider2D col = GetComponent<Collider2D>();
         col.sharedMaterial = physmat_springs;
+        camshake.Shake(CamShakeType.Strong);
 
         yield return new WaitForSeconds(1.5f);
 
