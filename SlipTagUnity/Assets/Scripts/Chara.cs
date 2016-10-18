@@ -20,7 +20,7 @@ public class Chara : MonoBehaviour
 
     // Movement
     public PhysicsMaterial2D physmat_normal, physmat_springs;
-    private Vector2 move_dir;
+    private Vector2 des_move_dir;
     private float radius = 0.5f;
     private Vector2 start_pos;
     private Vector2 prev_pos;
@@ -34,7 +34,7 @@ public class Chara : MonoBehaviour
 
     // Other State
     private bool chaser = false;
-    private Power power = Power.Dash;
+    private Power power = Power.None;
 
     // Events
     public Action<Chara, Chara> on_tag;
@@ -104,11 +104,13 @@ public class Chara : MonoBehaviour
     {
         while (true)
         {
-            move_dir = new Vector2(
+            while (Time.timeScale == 0) yield return null;
+
+            des_move_dir = new Vector2(
                 InputExt.GetAxis(PlayerID, Control.X),
                 InputExt.GetAxis(PlayerID, Control.Y)).normalized;
 
-            if (Time.timeScale > 0 && InputExt.GetKeyDown(PlayerID, Control.Action))
+            if (InputExt.GetKeyDown(PlayerID, Control.Action))
                 UsePower();
 
             yield return null;
@@ -122,9 +124,11 @@ public class Chara : MonoBehaviour
 
         while (true)
         {
+            while (Time.timeScale == 0) yield return null;
+
             if (IsChaser())
             {
-                move_dir = (opponent.transform.position - transform.position).normalized;
+                des_move_dir = (opponent.transform.position - transform.position).normalized;
                 yield return null;
             }
             else
@@ -143,7 +147,7 @@ public class Chara : MonoBehaviour
 
                 for (float t = 0; t < 0.1f; t += Time.deltaTime)
                 {
-                    move_dir = (waypoint - (Vector2)transform.position).normalized;
+                    des_move_dir = (waypoint - (Vector2)transform.position).normalized;
                     yield return null;
                 }
             }            
@@ -151,7 +155,7 @@ public class Chara : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        rb.AddForce(move_dir * speed, ForceMode2D.Force);
+        rb.AddForce(des_move_dir * speed, ForceMode2D.Force);
         prev_pos = transform.position;
 
         // Warp history
@@ -228,9 +232,9 @@ public class Chara : MonoBehaviour
     }
     private void Blink()
     {
-        Vector2 dir = ((Vector2)transform.position - prev_pos).normalized;
-        //Vector2 dir = GetInputMove();
-        float dist = 5;
+        //Vector2 dir = ((Vector2)transform.position - prev_pos).normalized;
+        Vector2 dir = des_move_dir;
+        float dist = 7;
         Vector2 pos = (Vector2)transform.position + dir * dist;
 
         while (dist > 0 && Physics2D.OverlapCircle(pos, radius))
