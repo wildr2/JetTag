@@ -84,6 +84,7 @@ public class TimeScaleManager : MonoBehaviour
         if (this != _instance) return;
 
         product = new FloatProduct(base_timescale);
+        Instance.UpdateTimeScale();
     }
     private void Update()
     {
