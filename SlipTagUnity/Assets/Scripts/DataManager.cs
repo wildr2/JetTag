@@ -42,8 +42,10 @@ public class DataManager : MonoBehaviour
 
     public bool ValidControlChoices()
     {
-        return InputExt.GetPlayerScheme(0) != InputExt.GetPlayerScheme(1)
-            || (ControlScheme)InputExt.GetPlayerScheme(0) == ControlScheme.AI;
+        ControlScheme cs0 = (ControlScheme)InputExt.GetPlayerScheme(0);
+        ControlScheme cs1 = (ControlScheme)InputExt.GetPlayerScheme(1);
+
+        return (cs0 != ControlScheme.None && cs1 != ControlScheme.None) && (cs0 != cs1 || cs0 == ControlScheme.AI);
     }
     public bool ValidColorChoices()
     {

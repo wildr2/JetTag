@@ -19,11 +19,13 @@ public class Chara : MonoBehaviour
 
     // Movement
     public PhysicsMaterial2D physmat_normal, physmat_springs;
+    private Vector2 move_dir;
     private float radius = 0.5f;
     private Vector2 start_pos;
     private Vector2 prev_pos;
     private float speed, normal_speed = 20f;
     private Coroutine squash_routine;
+    private Waypoints waypoints;
 
     // Warp
     private float warp_secs = 1f;
@@ -32,10 +34,10 @@ public class Chara : MonoBehaviour
     // Other State
     private bool chaser = false;
     private Power power = Power.None;
-    
+
     // Events
     public Action<Chara, Chara> on_tag;
-    
+
 
     // PUBLIC ACCESSORS
 
@@ -54,6 +56,15 @@ public class Chara : MonoBehaviour
 
         start_pos = transform.position;
         Setup();
+
+        if ((ControlScheme)InputExt.GetPlayerScheme(id) == ControlScheme.AI)
+        {
+            StartCoroutine(UpdateAI());
+        }
+        else
+        {
+            StartCoroutine(UpdateHuman());
+        }
 
         GameManager.Instance.on_reset += Setup;
     }
@@ -85,21 +96,60 @@ public class Chara : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        waypoints = FindObjectOfType<Waypoints>();
     }
-    private void Update()
+    private IEnumerator UpdateHuman()
     {
-        if (Time.timeScale > 0 && InputExt.GetKeyDown(PlayerID, Control.Action))
-            UsePower();
+        while (true)
+        {
+            move_dir = new Vector2(
+                InputExt.GetAxis(PlayerID, Control.X),
+                InputExt.GetAxis(PlayerID, Control.Y)).normalized;
+
+            if (Time.timeScale > 0 && InputExt.GetKeyDown(PlayerID, Control.Action))
+                UsePower();
+
+            yield return null;
+        }
+    }
+    private IEnumerator UpdateAI()
+    {
+        GameManager gm = GameManager.Instance;
+        Chara opponent = gm.charas[1 - PlayerID];
+        Vector2 waypoint = Vector2.zero;
+
+        while (true)
+        {
+            if (IsChaser())
+            {
+                move_dir = (opponent.transform.position - transform.position).normalized;
+                yield return null;
+            }
+            else
+            {
+                // Choose wp
+                float dist_to_opp = 0;
+                foreach (Vector2 wp in waypoints.Points)
+                {
+                    float dist = Vector2.Distance(wp, opponent.transform.position);
+                    if (dist > dist_to_opp)
+                    {
+                        waypoint = wp;
+                        dist_to_opp = dist;
+                    }
+                }
+
+                for (float t = 0; t < 0.1f; t += Time.deltaTime)
+                {
+                    move_dir = (waypoint - (Vector2)transform.position).normalized;
+                    yield return null;
+                }
+            }            
+        }
     }
     private void FixedUpdate()
     {
-        Vector2 move_input = new Vector2(
-            InputExt.GetAxis(PlayerID, Control.X),
-            InputExt.GetAxis(PlayerID, Control.Y));
-
-        Vector2 dir = move_input.normalized;
-
-        rb.AddForce(dir * speed, ForceMode2D.Force);
+        rb.AddForce(move_dir * speed, ForceMode2D.Force);
         prev_pos = transform.position;
 
         // Warp history

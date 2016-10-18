@@ -160,7 +160,10 @@ public class GameManager : MonoBehaviour
         match_ui.ShowTagScreen(winner, scores);
 
         // Wait
-        while (!InputExt.GetKeyDown(winner.PlayerID, Control.Action)) yield return null;
+        if ((ControlScheme)InputExt.GetPlayerScheme(winner.PlayerID) == ControlScheme.AI)
+            yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(1));
+        else
+            while (!InputExt.GetKeyDown(winner.PlayerID, Control.Action)) yield return null;
 
         // Hide UI
         match_ui.HideTagScreen();

@@ -7,7 +7,11 @@ public class MainMenuPage : MenuPage
 {
     public Image[] balls;
     public Text[] controls_text;
-    private string controls_text_initial = "press start\n" + "or right shift\n" + "or left shift";
+    private string controls_text_initial =
+        "AI\n\n" +
+        "press start\n" +
+        "or right shift\n" +
+        "or left shift\n\n";
     private ControlScheme[] human_controls = new ControlScheme[]
     { ControlScheme.Arrows, ControlScheme.WASD, ControlScheme.Gamepad1, ControlScheme.Gamepad2 };
 
@@ -79,7 +83,7 @@ public class MainMenuPage : MenuPage
         {
             if ((ControlScheme)InputExt.GetPlayerScheme(i) == cs)
             {
-                InputExt.SetPlayerControlScheme(i, ControlScheme.None);
+                InputExt.SetPlayerControlScheme(i, ControlScheme.AI);
                 UpdateControlsText(i);
                 return;
             }
@@ -88,7 +92,7 @@ public class MainMenuPage : MenuPage
         // Assign cs to empty slot
         for (int i = 0; i < 2; ++i)
         {
-            if ((ControlScheme)InputExt.GetPlayerScheme(i) == ControlScheme.None)
+            if ((ControlScheme)InputExt.GetPlayerScheme(i) == ControlScheme.AI)
             {
                 InputExt.SetPlayerControlScheme(i, cs);
                 UpdateControlsText(i);
@@ -98,7 +102,7 @@ public class MainMenuPage : MenuPage
     }
     private void UpdateControlsText(int player_id)
     {
-        if ((ControlScheme)InputExt.GetPlayerScheme(player_id) == ControlScheme.None)
+        if ((ControlScheme)InputExt.GetPlayerScheme(player_id) == ControlScheme.AI)
         {
             controls_text[player_id].text = controls_text_initial;
         }
@@ -111,7 +115,6 @@ public class MainMenuPage : MenuPage
     private void SwitchColor(int player_id, int index_change)
     {
         if (index_change == 0) return;
-        Tools.Log(index_change);
 
         int i = dm.player_color_ids[player_id];
         i = Tools.Mod(i + index_change, dm.color_options.Length);

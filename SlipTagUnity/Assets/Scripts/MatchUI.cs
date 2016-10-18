@@ -68,7 +68,11 @@ public class MatchUI : MonoBehaviour
 
         // Continue text
         tag_continue_text.color = winner.PlayerColor;
-        tag_continue_text.text = "press " + InputExt.GetControlName(winner.PlayerID, Control.Action);
+        string control = InputExt.GetControlName(winner.PlayerID, Control.Action);
+        if (control != "")
+            tag_continue_text.text = "press " + control;
+        else
+            tag_continue_text.text = "";
     }
     public void HideTagScreen()
     {
