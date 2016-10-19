@@ -5,53 +5,45 @@ using System.Collections;
 [RequireComponent(typeof(EventTrigger))]
 public class ButtonEvents : MonoBehaviour
 {
-    protected virtual void Start()
+    protected virtual void Awake()
     {
-        MenuPage page = GetComponentInParent<MenuPage>();
-        if (page != null)
-        {
-            PageManager pm = page.GetManager();
-            if (pm != null)
-            {
-                EventTrigger trigger = GetComponent<EventTrigger>();
+        EventTrigger trigger = GetComponent<EventTrigger>();
 
-                // Click 
-                EventTrigger.Entry click = new EventTrigger.Entry();
-                click.eventID = EventTriggerType.PointerClick;
-                click.callback.AddListener((eventData) => { OnClick(); });
-                trigger.triggers.Add(click);
+        // Click 
+        EventTrigger.Entry click = new EventTrigger.Entry();
+        click.eventID = EventTriggerType.PointerClick;
+        click.callback.AddListener((eventData) => { OnClick(); });
+        trigger.triggers.Add(click);
 
-                // Click (keyboard) 
-                EventTrigger.Entry click_key = new EventTrigger.Entry();
-                click_key.eventID = EventTriggerType.Submit;
-                click_key.callback.AddListener((eventData) => { OnClick(); });
-                trigger.triggers.Add(click_key);
+        // Click (keyboard) 
+        EventTrigger.Entry click_key = new EventTrigger.Entry();
+        click_key.eventID = EventTriggerType.Submit;
+        click_key.callback.AddListener((eventData) => { OnClick(); });
+        trigger.triggers.Add(click_key);
 
-                // Select
-                EventTrigger.Entry select = new EventTrigger.Entry();
-                select.eventID = EventTriggerType.PointerEnter;
-                select.callback.AddListener((eventData) => { OnSelect(); });
-                trigger.triggers.Add(select);
+        // Select
+        EventTrigger.Entry select = new EventTrigger.Entry();
+        select.eventID = EventTriggerType.PointerEnter;
+        select.callback.AddListener((eventData) => { OnSelect(); });
+        trigger.triggers.Add(select);
 
-                // Select (keyboard/gamepad)
-                EventTrigger.Entry select_key = new EventTrigger.Entry();
-                select_key.eventID = EventTriggerType.Select;
-                select_key.callback.AddListener((eventData) => { OnSelect(); });
-                trigger.triggers.Add(select_key);
+        // Select (keyboard/gamepad)
+        EventTrigger.Entry select_key = new EventTrigger.Entry();
+        select_key.eventID = EventTriggerType.Select;
+        select_key.callback.AddListener((eventData) => { OnSelect(); });
+        trigger.triggers.Add(select_key);
 
-                // Deselect
-                EventTrigger.Entry deselect = new EventTrigger.Entry();
-                deselect.eventID = EventTriggerType.PointerExit;
-                deselect.callback.AddListener((eventData) => { OnDeselect(); });
-                trigger.triggers.Add(deselect);
+        // Deselect
+        EventTrigger.Entry deselect = new EventTrigger.Entry();
+        deselect.eventID = EventTriggerType.PointerExit;
+        deselect.callback.AddListener((eventData) => { OnDeselect(); });
+        trigger.triggers.Add(deselect);
 
-                // Deselect (keyboard/gamepad)
-                EventTrigger.Entry deselect_key = new EventTrigger.Entry();
-                deselect_key.eventID = EventTriggerType.Deselect;
-                deselect_key.callback.AddListener((eventData) => { OnDeselect(); });
-                trigger.triggers.Add(deselect_key);
-            }
-        }
+        // Deselect (keyboard/gamepad)
+        EventTrigger.Entry deselect_key = new EventTrigger.Entry();
+        deselect_key.eventID = EventTriggerType.Deselect;
+        deselect_key.callback.AddListener((eventData) => { OnDeselect(); });
+        trigger.triggers.Add(deselect_key);
     }
     
     protected virtual void OnClick()

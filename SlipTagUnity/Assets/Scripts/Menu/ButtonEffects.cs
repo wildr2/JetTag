@@ -5,40 +5,36 @@ using System.Collections;
 public class ButtonEffects : ButtonEvents
 {
     private Text text;
-    private string label;
 
-    private void Awake()
+    protected override void Awake()
     {
         text = GetComponent<Text>();
-        if (text != null) label = text.text;
+        base.Awake();
     }
 
     protected override void OnClick()
     {
         base.OnClick();
-        if (text != null)
-        {
-            text.text = label;
-        }
+        if (text != null) if (text != null) text.text = RemoveArrows(text.text);
     }
     protected override void OnSelect()
     {
         base.OnSelect();
-
-        if (text != null)
-        {
-            label = text.text;
-            text.text = "> " + label + " <";
-        }   
+        if (text != null) if (text != null) text.text = AddArrows(text.text);
     }
     protected override void OnDeselect()
     {
         base.OnDeselect();
+        if (text != null) text.text = RemoveArrows(text.text);
+    }
 
-        if (text != null)
-        {
-            text.text = label;
-        }
+    private string AddArrows(string s)
+    {
+        return "> " + s.Trim(new char[] { '>', '<', ' ' }) + " <";
+    }
+    private string RemoveArrows(string s)
+    {
+        return s.Trim(new char[] { '>', '<', ' ' });
     }
 
 }
