@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MatchUI : MonoBehaviour
 {
@@ -47,10 +48,6 @@ public class MatchUI : MonoBehaviour
         tag_screen.gameObject.SetActive(true);
         tag_text.color = chaser.PlayerColor;
 
-        tag_chaser.color = chaser.PlayerColor;
-        tag_chaser.transform.position = Camera.main.WorldToScreenPoint(chaser.transform.position);
-        tag_runner.transform.position = Camera.main.WorldToScreenPoint(runner.transform.position);
-
         // Score
         if (chaser.PlayerID == 0)
         {
@@ -65,6 +62,7 @@ public class MatchUI : MonoBehaviour
         chaser_score_txt.color = chaser.PlayerColor;
         chaser_score_txt.text = gm.GetScores()[chaser.PlayerID].ToString();
         runner_score_txt.text = gm.GetScores()[runner.PlayerID].ToString();
+
 
         // Continue text
         tag_continue_text.color = winner.PlayerColor;

@@ -30,6 +30,9 @@ public class Chara : MonoBehaviour
     private Coroutine squash_routine;
     private Waypoints waypoints;
 
+    // Replay
+    private Coroutine replay_routine;
+
     // Warp
     private float warp_secs = 1.5f;
     private Queue<Vector2> pos_history, velocity_history;
@@ -47,6 +50,14 @@ public class Chara : MonoBehaviour
     public bool IsChaser()
     {
         return chaser;
+    }
+    public Queue<Vector2> GetPosHistory()
+    {
+        return pos_history;
+    }
+    public Queue<Vector2> GetVelocityHistory()
+    {
+        return velocity_history;
     }
 
 
@@ -75,6 +86,8 @@ public class Chara : MonoBehaviour
     {
         alive = true;
 
+        if (replay_routine != null) StopCoroutine(replay_routine);
+
         graphics.gameObject.SetActive(true);
         transform.position = start_pos;
         graphics.gameObject.SetActive(true);
@@ -91,12 +104,22 @@ public class Chara : MonoBehaviour
     public void SetChaser()
     {
         chaser = true;
-        graphics.GetComponent<SpriteRenderer>().color = PlayerColor;
+        SetStyle(PlayerColor, false);
     }
     public void SetRunner()
     {
         chaser = false;
-        graphics.GetComponent<SpriteRenderer>().color = Color.white;
+        SetStyle(Color.white, false);
+    }
+    public void SetStyle(Color color, bool hollow)
+    {
+        graphics.GetComponent<SpriteRenderer>().color = color;
+    }
+    public void ShowReplay()
+    {
+        replay_routine = StartCoroutine(ReplayRoutine());
+        graphics.gameObject.SetActive(true);
+        rb.isKinematic = false;
     }
 
 
@@ -178,10 +201,8 @@ public class Chara : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        if (!alive) return;
-
         Chara other = col.collider.GetComponent<Chara>();
-        if (other != null)
+        if (alive && other != null)
         {
             if (chaser)
             {
@@ -353,5 +374,22 @@ public class Chara : MonoBehaviour
         }
 
         graphics.transform.localScale = Vector2.one;
+    }
+    private IEnumerator ReplayRoutine()
+    {
+        Vector2[] p = pos_history.ToArray();
+        Vector2[] v = velocity_history.ToArray();
+        Vector2 endpos = transform.position;
+
+        for (int i = 0; i < p.Length; ++i)
+        {
+            transform.position = p[i];
+            rb.velocity = v[i];
+            yield return new WaitForFixedUpdate();
+        }
+
+        rb.isKinematic = true;
+        rb.velocity = Vector2.zero;
+        transform.position = endpos;
     }
 }

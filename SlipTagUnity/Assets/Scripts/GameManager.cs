@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     public Chara[] charas;
     public MatchUI match_ui;
+    public Transform court;
     private static UID ui_timescale_id = new UID();
 
     public MatchState State { get; private set; }
@@ -94,7 +95,7 @@ public class GameManager : MonoBehaviour
         CameraShake camshake = Camera.main.GetComponent<CameraShake>();
         camshake.DefineShakeType(CamShakeType.Strong, new CamShakeParams(0.1f, 3, 1, 4));
         camshake.DefineShakeType(CamShakeType.StrongNoF, new CamShakeParams(0.15f, 4, 1, 0));
-        camshake.DefineShakeType(CamShakeType.VeryStrong, new CamShakeParams(0.4f, 6, 1, 7));
+        camshake.DefineShakeType(CamShakeType.VeryStrong, new CamShakeParams(0.4f, 6, 1, 5));
 
         // Characters
         for (int i = 0; i < charas.Length; ++i)
@@ -130,7 +131,7 @@ public class GameManager : MonoBehaviour
         State = MatchState.TurnChange;
 
         int chaser_i = turn_num % 2;
-        Tools.Log(string.Format("turn {0}: chaser is p{1}", turn_num, chaser_i));
+        //Tools.Log(string.Format("turn {0}: chaser is p{1}", turn_num, chaser_i));
 
         // Set chara roles
         charas[chaser_i].SetChaser();
@@ -163,23 +164,27 @@ public class GameManager : MonoBehaviour
         State = MatchState.Tagged;
         ++scores[winner.PlayerID];
 
-        TimeScaleManager.SetFactor(1f, ui_timescale_id);
-        yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(2f));
+        
+        court.gameObject.SetActive(false);
+        yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(1f));
 
         // Show UI
-        TimeScaleManager.SetFactor(0, ui_timescale_id);
         yield return null; // let collision adjustment happen
         match_ui.ShowTagScreen(winner, scores);
+        //yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(1f));
+
+        charas[0].ShowReplay();
+        charas[1].ShowReplay();
 
         // Wait
         if ((ControlScheme)InputExt.GetPlayerScheme(winner.PlayerID) == ControlScheme.AI)
-            yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(1));
+            yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(4f));
         else
             while (!InputExt.GetKeyDown(winner.PlayerID, Control.Action)) yield return null;
 
         // Hide UI
+        court.gameObject.SetActive(true);
         match_ui.HideTagScreen();
-        TimeScaleManager.SetFactor(1, ui_timescale_id);
 
         // Reset
         if (on_reset != null) on_reset();
