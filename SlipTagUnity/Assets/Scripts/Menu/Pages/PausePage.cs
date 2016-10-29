@@ -25,8 +25,8 @@ public class PausePage : MenuPage
         Camera.main.backgroundColor = Color.white;
 
         // Balls
-        chaser.SetStyle(Color.black, false, new Color(0.95f, 0.95f, 0.95f));
-        runner.SetStyle(Color.black, true, new Color(0.95f, 0.95f, 0.95f));
+        chaser.SetStyle(Color.black, null, Color.black);
+        runner.SetStyle(Color.white, Color.black, Color.black);
 
         // Score
         if (chaser.PlayerID == 0)
@@ -52,8 +52,8 @@ public class PausePage : MenuPage
         Camera.main.backgroundColor = original_background_color;
 
         // Balls
-        chaser.SetStyle(chaser.PlayerColor, false);
-        runner.SetStyle(Color.white, false);
+        chaser.SetStyle(chaser.PlayerColor);
+        runner.SetStyle(Color.white);
 
         base.SetOut();
     }

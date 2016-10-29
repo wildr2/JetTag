@@ -15,7 +15,7 @@ public class Chara : MonoBehaviour
     // References
     private Rigidbody2D rb;
     public Transform graphics;
-    public Sprite solid_sprite, hollow_sprite;
+    public SpriteRenderer center_sr, outline_sr;
     public ParticleSystem bump_particles_prefab, explosion_prefab;
     private CameraShake camshake;
 
@@ -108,20 +108,30 @@ public class Chara : MonoBehaviour
     public void SetChaser()
     {
         chaser = true;
-        SetStyle(PlayerColor, false);
+        SetStyle(PlayerColor);
     }
     public void SetRunner()
     {
         chaser = false;
-        SetStyle(Color.white, false);
+        SetStyle(Color.white);
     }
-    public void SetStyle(Color color, bool hollow, Color? smoke_color=null)
+    public void SetStyle(Color center_color, Color? outline_color=null, Color? smoke_color=null)
     {
-        SpriteRenderer sr = graphics.GetComponent<SpriteRenderer>();
+        // Center
+        center_sr.color = center_color;
 
-        sr.color = color;
-        sr.sprite = hollow ? hollow_sprite : solid_sprite;
+        // Outline
+        if (outline_color != null)
+        {
+            outline_sr.color = (Color)outline_color;
+            outline_sr.enabled = true;
+        }
+        else
+        {
+            outline_sr.enabled = false;
+        }
 
+        // Smoke
         ParticleSystemRenderer psr = smoke_ps.GetComponent<ParticleSystemRenderer>();
         psr.material.color = smoke_color != null ? (Color)smoke_color : smoke_color_normal;
     }
@@ -210,6 +220,9 @@ public class Chara : MonoBehaviour
 
         if (pos_history.Count > warp_secs / Time.fixedDeltaTime) pos_history.Dequeue();
         if (velocity_history.Count > warp_secs / Time.fixedDeltaTime) velocity_history.Dequeue();
+    }
+    private void Update()
+    {
     }
 
     private void OnCollisionEnter2D(Collision2D col)

@@ -53,6 +53,7 @@ Shader "Sprites/WorldTextured"
 			};
 
 			fixed4 _Color;
+			uniform float4 _OverTex_ST;
 
 			v2f vert(appdata_t IN)
 			{
@@ -79,9 +80,12 @@ Shader "Sprites/WorldTextured"
 				fixed4 color = tex2D(_MainTex, uv);
 
 				float2 wpos_uv = wpos.xy;
-				wpos_uv[0] = abs(wpos_uv[0]) % 1;
-				wpos_uv[1] = abs(wpos_uv[1]) % 1;
-				color *= tex2D(_OverTex, wpos_uv * _Scale);
+				wpos_uv[0] = abs(wpos_uv[0] * _Scale) % 1;
+				wpos_uv[1] = abs(wpos_uv[1] * _Scale) % 1;
+				
+				wpos_uv = wpos_uv.xy * _OverTex_ST.xy + _OverTex_ST.zw;
+				
+				color *= tex2D(_OverTex, wpos_uv);
 
 #if ETC1_EXTERNAL_ALPHA
 				// get the color from an external texture (usecase: Alpha support for ETC1 on android)

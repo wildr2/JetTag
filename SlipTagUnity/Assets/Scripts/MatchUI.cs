@@ -28,8 +28,8 @@ public class MatchUI : MonoBehaviour
             Mathf.Atan2(dif.y, dif.x) * Mathf.Rad2Deg);
 
         // Balls
-        chaser.SetStyle(Color.white, true, Color.white);
-        runner.SetStyle(Color.white, false, Color.white);
+        chaser.SetStyle(chaser.PlayerColor, Color.white, Color.white);
+        runner.SetStyle(Color.white, null, Color.white);
     }
     public void HideChaseScreen(Chara chaser, Chara runner)
     {
@@ -37,8 +37,8 @@ public class MatchUI : MonoBehaviour
         Camera.main.backgroundColor = Color.black;
 
         // Balls
-        chaser.SetStyle(chaser.PlayerColor, false);
-        runner.SetStyle(Color.white, false);
+        chaser.SetStyle(chaser.PlayerColor);
+        runner.SetStyle(Color.white);
     }
     
     public void ShowTagScreen(Chara winner, int[] scores)
