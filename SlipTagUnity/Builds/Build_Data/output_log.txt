@@ -1,0 +1,36 @@
+Initialize engine version: 5.4.1f1 (649f48bbbf0f)
+GfxDevice: creating device client; threaded=1
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.0]
+    Renderer: NVIDIA GeForce GTX 970 (ID=0x13c2)
+    Vendor:   NVIDIA
+    VRAM:     3072 MB
+Begin MonoManager ReloadAssembly
+Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.UI.dll (this message is harmless)
+Loading C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
+Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.Networking.dll (this message is harmless)
+Loading C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
+- Completed reload, in  0.040 seconds
+Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\Robert\_KEEP\Personal\Game Dev\SlipTag\SlipTagUnity\Builds\Build_Data\Managed\System.dll (this message is harmless)
+desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
+<RI> Initializing input.
+<RI> Input initialized.
+<RI> Initialized touch support.
+UnloadTime: 0.575528 ms
+Joystick connected ("Controller (Xbox One For Windows)").
+ 
+(Filename:  Line: 1353)
+
+Unloading 5 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 2.132031 ms
+
+Unloading 15 unused Assets to reduce memory usage. Loaded Objects now: 497.
+Total: 0.281616 ms (FindLiveObjects: 0.018149 ms CreateObjectMapping: 0.014637 ms MarkObjects: 0.235949 ms  DeleteObjects: 0.012587 ms)
+
+Setting up 1 worker threads for Enlighten.
+  Thread -> id: 4600 -> priority: 1 

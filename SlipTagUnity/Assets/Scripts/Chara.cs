@@ -355,8 +355,10 @@ public class Chara : MonoBehaviour
     {
         camshake.Shake(CamShakeType.Strong);
         graphics.gameObject.SetActive(false);
+        smoke_ps.Stop();
         yield return new WaitForSeconds(3);
         graphics.gameObject.SetActive(true);
+        smoke_ps.Play();
     }
     public IEnumerator Springs()
     {
