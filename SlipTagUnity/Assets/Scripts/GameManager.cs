@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using System.Collections;
 using System;
 
-public enum CamShakeType { Strong, StrongNoF }
+public enum CamShakeType { Strong, StrongNoF, VeryStrong }
 public enum MatchState { InPlay, Tagged, TurnChange }
 
 public class GameManager : MonoBehaviour
@@ -94,6 +94,7 @@ public class GameManager : MonoBehaviour
         CameraShake camshake = Camera.main.GetComponent<CameraShake>();
         camshake.DefineShakeType(CamShakeType.Strong, new CamShakeParams(0.1f, 3, 1, 4));
         camshake.DefineShakeType(CamShakeType.StrongNoF, new CamShakeParams(0.15f, 4, 1, 0));
+        camshake.DefineShakeType(CamShakeType.VeryStrong, new CamShakeParams(0.4f, 6, 1, 7));
 
         // Characters
         for (int i = 0; i < charas.Length; ++i)
@@ -161,6 +162,9 @@ public class GameManager : MonoBehaviour
         // State and score
         State = MatchState.Tagged;
         ++scores[winner.PlayerID];
+
+        TimeScaleManager.SetFactor(1f, ui_timescale_id);
+        yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(2f));
 
         // Show UI
         TimeScaleManager.SetFactor(0, ui_timescale_id);

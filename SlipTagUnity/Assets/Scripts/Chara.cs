@@ -15,10 +15,12 @@ public class Chara : MonoBehaviour
     // References
     private Rigidbody2D rb;
     public Transform graphics;
-    public ParticleSystem bump_ps;
+    public ParticleSystem bump_particles_prefab, explosion_prefab;
+    public ParticleSystem smoke_ps;
     private CameraShake camshake;
 
     // Movement
+    public bool alive = true;
     public PhysicsMaterial2D physmat_normal, physmat_springs;
     private Vector2 des_move_dir;
     private float radius = 0.5f;
@@ -71,11 +73,17 @@ public class Chara : MonoBehaviour
     }
     public void Setup()
     {
+        alive = true;
+
+        graphics.gameObject.SetActive(true);
         transform.position = start_pos;
         graphics.gameObject.SetActive(true);
         rb.velocity = Vector2.zero;
+        rb.isKinematic = false;
         rb.angularVelocity = 0;
         speed = normal_speed;
+
+        smoke_ps.Play();
 
         pos_history = new Queue<Vector2>();
         velocity_history = new Queue<Vector2>();
@@ -167,17 +175,40 @@ public class Chara : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D col)
     {
+        if (!alive) return;
+
         Chara other = col.collider.GetComponent<Chara>();
         if (other != null)
         {
             if (chaser)
             {
                 if (on_tag != null) on_tag(this, other);
+
+                // Explosion
+                ParticleSystem ps = Instantiate(explosion_prefab);
+                ps.startColor = PlayerColor;
+                ps.transform.position = col.contacts[0].point;
+                camshake.Shake(CamShakeType.VeryStrong);
+
+                // Hide and freeze
+                rb.velocity = Vector2.zero;
+                rb.isKinematic = true;
+                graphics.gameObject.SetActive(false);
+                smoke_ps.Stop();
+                alive = false;
             } 
             else
             {
+                // Correct position
                 transform.position = (Vector2)other.transform.position 
                     + col.contacts[0].normal * radius * 2f;
+
+                // Hide and freeze
+                rb.velocity = Vector2.zero;
+                rb.isKinematic = true;
+                graphics.gameObject.SetActive(false);
+                smoke_ps.Stop();
+                alive = false;
             }
         }
         else if (col.collider.CompareTag("Wall"))
@@ -185,9 +216,9 @@ public class Chara : MonoBehaviour
             // Wall collision
 
             // Particles
-            bump_ps.Stop();
-            bump_ps.Clear();
-            bump_ps.Play();
+            ParticleSystem ps = Instantiate(bump_particles_prefab);
+            ps.transform.position = transform.position; // col.contacts[0].point;
+            ps.startColor = chaser ? PlayerColor :Color.white;
 
             // Squash
             if (squash_routine != null) StopCoroutine(squash_routine);
