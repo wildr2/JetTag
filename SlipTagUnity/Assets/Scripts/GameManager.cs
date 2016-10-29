@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public Chara[] charas;
     public MatchUI match_ui;
     public Transform court;
+    public Color background_color;
     private static UID ui_timescale_id = new UID();
 
     public MatchState State { get; private set; }
@@ -140,11 +141,15 @@ public class GameManager : MonoBehaviour
             if (i != chaser_i) charas[i].SetRunner();
         }
 
-        // Flash color
+        // Flash chase screen
         TimeScaleManager.SetFactor(0, ui_timescale_id);
+        court.gameObject.SetActive(false);
         match_ui.ShowChaseScreen(charas[chaser_i], charas[1 - chaser_i]);
+
         yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(0.5f));
-        match_ui.HideChaseScreen();
+
+        match_ui.HideChaseScreen(GetChaser(), GetRunner());
+        court.gameObject.SetActive(true);
         TimeScaleManager.SetFactor(1, ui_timescale_id);
 
         turn_start_time = Time.timeSinceLevelLoad;
@@ -166,19 +171,18 @@ public class GameManager : MonoBehaviour
 
         
         court.gameObject.SetActive(false);
+        Camera.main.backgroundColor = background_color;
         yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(1f));
 
         // Show UI
-        yield return null; // let collision adjustment happen
         match_ui.ShowTagScreen(winner, scores);
-        //yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(1f));
 
         charas[0].ShowReplay();
         charas[1].ShowReplay();
 
         // Wait
         if ((ControlScheme)InputExt.GetPlayerScheme(winner.PlayerID) == ControlScheme.AI)
-            yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(4f));
+            yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(2.5f));
         else
             while (!InputExt.GetKeyDown(winner.PlayerID, Control.Action)) yield return null;
 

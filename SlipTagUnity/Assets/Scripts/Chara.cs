@@ -15,9 +15,13 @@ public class Chara : MonoBehaviour
     // References
     private Rigidbody2D rb;
     public Transform graphics;
+    public Sprite solid_sprite, hollow_sprite;
     public ParticleSystem bump_particles_prefab, explosion_prefab;
-    public ParticleSystem smoke_ps;
     private CameraShake camshake;
+
+    // Smoke
+    private Color smoke_color_normal;
+    public ParticleSystem smoke_ps;
 
     // Movement
     public bool alive = true;
@@ -111,9 +115,15 @@ public class Chara : MonoBehaviour
         chaser = false;
         SetStyle(Color.white, false);
     }
-    public void SetStyle(Color color, bool hollow)
+    public void SetStyle(Color color, bool hollow, Color? smoke_color=null)
     {
-        graphics.GetComponent<SpriteRenderer>().color = color;
+        SpriteRenderer sr = graphics.GetComponent<SpriteRenderer>();
+
+        sr.color = color;
+        sr.sprite = hollow ? hollow_sprite : solid_sprite;
+
+        ParticleSystemRenderer psr = smoke_ps.GetComponent<ParticleSystemRenderer>();
+        psr.material.color = smoke_color != null ? (Color)smoke_color : smoke_color_normal;
     }
     public void ShowReplay()
     {
@@ -130,6 +140,9 @@ public class Chara : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         waypoints = FindObjectOfType<Waypoints>();
         camshake = Camera.main.GetComponent<CameraShake>();
+
+        ParticleSystemRenderer psr = smoke_ps.GetComponent<ParticleSystemRenderer>();
+        smoke_color_normal = psr.material.color;
     }
     private IEnumerator UpdateHuman()
     {
@@ -242,7 +255,7 @@ public class Chara : MonoBehaviour
             // Particles
             ParticleSystem ps = Instantiate(bump_particles_prefab);
             ps.transform.position = transform.position; // col.contacts[0].point;
-            ps.startColor = chaser ? PlayerColor :Color.white;
+            //ps.startColor = chaser ? PlayerColor :Color.white;
 
             // Squash
             if (squash_routine != null) StopCoroutine(squash_routine);

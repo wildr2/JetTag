@@ -6,11 +6,9 @@ using System.Collections.Generic;
 public class MatchUI : MonoBehaviour
 {
     public Transform chase_screen;
-    public Image chase_arrow, chase_runner, chase_chaser;
-    public Image chase_background;
+    public Image chase_arrow;
 
     public Transform tag_screen;
-    public Image tag_runner, tag_chaser;
     public Text tag_text, tag_continue_text;
 
     public Text runner_score_txt, chaser_score_txt;
@@ -19,7 +17,7 @@ public class MatchUI : MonoBehaviour
     public void ShowChaseScreen(Chara chaser, Chara runner)
     {
         chase_screen.gameObject.SetActive(true);
-        chase_background.color = chaser.PlayerColor;
+        Camera.main.backgroundColor = chaser.PlayerColor;
 
         // Arrow
         Vector2 dif = runner.transform.position - chaser.transform.position;
@@ -30,13 +28,17 @@ public class MatchUI : MonoBehaviour
             Mathf.Atan2(dif.y, dif.x) * Mathf.Rad2Deg);
 
         // Balls
-        chase_chaser.color = chaser.PlayerColor;
-        chase_chaser.transform.position = Camera.main.WorldToScreenPoint(chaser.transform.position);
-        chase_runner.transform.position = Camera.main.WorldToScreenPoint(runner.transform.position);
+        chaser.SetStyle(Color.white, true, Color.white);
+        runner.SetStyle(Color.white, false, Color.white);
     }
-    public void HideChaseScreen()
+    public void HideChaseScreen(Chara chaser, Chara runner)
     {
         chase_screen.gameObject.SetActive(false);
+        Camera.main.backgroundColor = Color.black;
+
+        // Balls
+        chaser.SetStyle(chaser.PlayerColor, false);
+        runner.SetStyle(Color.white, false);
     }
     
     public void ShowTagScreen(Chara winner, int[] scores)
@@ -49,6 +51,7 @@ public class MatchUI : MonoBehaviour
         tag_text.color = chaser.PlayerColor;
 
         // Score
+        Debug.logger.logEnabled = false;
         if (chaser.PlayerID == 0)
         {
             chaser_score_txt.rectTransform.localPosition = new Vector3(-500, 0, 0);
@@ -62,6 +65,7 @@ public class MatchUI : MonoBehaviour
         chaser_score_txt.color = chaser.PlayerColor;
         chaser_score_txt.text = gm.GetScores()[chaser.PlayerID].ToString();
         runner_score_txt.text = gm.GetScores()[runner.PlayerID].ToString();
+        Debug.logger.logEnabled = true;
 
 
         // Continue text

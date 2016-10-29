@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(ParticleSystem))]
-public class ParticleDestroyOnDone : MonoBehaviour
+public class DestroyPSOnDone : MonoBehaviour
 {
     private ParticleSystem ps;
 
