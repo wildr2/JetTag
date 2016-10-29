@@ -163,12 +163,15 @@ public class Chara : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        if (!alive || Time.timeScale == 0) return;
+
         rb.AddForce(des_move_dir * speed, ForceMode2D.Force);
         prev_pos = transform.position;
 
         // Warp history
         pos_history.Enqueue(prev_pos);
         velocity_history.Enqueue(rb.velocity);
+
         if (pos_history.Count > warp_secs / Time.fixedDeltaTime) pos_history.Dequeue();
         if (velocity_history.Count > warp_secs / Time.fixedDeltaTime) velocity_history.Dequeue();
     }
@@ -232,6 +235,8 @@ public class Chara : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        if (!alive) return;
+
         Pickup pu = collider.GetComponent<Pickup>();
         if (pu != null)
         {
@@ -242,7 +247,7 @@ public class Chara : MonoBehaviour
 
     private void UsePower()
     {
-        if (power == Power.None) return;
+        if (power == Power.None || !alive || Time.timeScale == 0) return;
 
         if (power == Power.Dash) StartCoroutine(Dash());
         else if (power == Power.Blink) Blink();
