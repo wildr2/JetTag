@@ -48,7 +48,7 @@ public class PausePage : MenuPage
         Chara chaser = gm.GetChaser();
         Chara runner = gm.GetRunner();
 
-        gm.court.gameObject.SetActive(true);
+        if (gm.State == MatchState.InPlay) gm.court.gameObject.SetActive(true);
         Camera.main.backgroundColor = original_background_color;
 
         // Balls

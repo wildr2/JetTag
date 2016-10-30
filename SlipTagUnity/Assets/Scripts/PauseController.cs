@@ -18,7 +18,7 @@ public class PauseController : MonoBehaviour
     {
         // Pause input
         bool pause_input = Input.GetButtonDown("Pause");
-        if (pause_input)
+        if (pause_input && GameManager.Instance.State != MatchState.TurnChange)
         {
             if (paused)
             {

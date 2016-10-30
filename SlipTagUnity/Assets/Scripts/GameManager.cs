@@ -172,7 +172,7 @@ public class GameManager : MonoBehaviour
         
         court.gameObject.SetActive(false);
         Camera.main.backgroundColor = background_color;
-        yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(1f));
+        yield return new WaitForSeconds(1f);
 
         // Show UI
         match_ui.ShowTagScreen(winner, scores);
@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour
 
         // Wait
         if ((ControlScheme)InputExt.GetPlayerScheme(winner.PlayerID) == ControlScheme.AI)
-            yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(2.5f));
+            yield return new WaitForSeconds(2.5f);
         else
             while (!InputExt.GetKeyDown(winner.PlayerID, Control.Action)) yield return null;
 

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class MatchUI : MonoBehaviour
 {
     public Transform chase_screen;
-    public Image chase_arrow;
+    public Image chase_arrow, chase_background;
 
     public Transform tag_screen;
     public Text tag_text, tag_continue_text;
@@ -17,7 +17,7 @@ public class MatchUI : MonoBehaviour
     public void ShowChaseScreen(Chara chaser, Chara runner)
     {
         chase_screen.gameObject.SetActive(true);
-        Camera.main.backgroundColor = chaser.PlayerColor;
+        chase_background.color = chaser.PlayerColor;
 
         // Arrow
         Vector2 dif = runner.transform.position - chaser.transform.position;
@@ -34,7 +34,6 @@ public class MatchUI : MonoBehaviour
     public void HideChaseScreen(Chara chaser, Chara runner)
     {
         chase_screen.gameObject.SetActive(false);
-        Camera.main.backgroundColor = Color.black;
 
         // Balls
         chaser.SetStyle(chaser.PlayerColor);
