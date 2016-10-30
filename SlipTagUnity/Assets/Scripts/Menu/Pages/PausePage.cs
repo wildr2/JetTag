@@ -8,6 +8,7 @@ public class PausePage : MenuPage
     public PauseController pause_controller;
     public Image runner_img, chaser_img;
     public Text runner_score_txt, chaser_score_txt;
+    public CanvasGroup tag_screen;
 
     private Color original_background_color;
 
@@ -41,6 +42,9 @@ public class PausePage : MenuPage
         }
         chaser_score_txt.text = gm.GetScores()[chaser.PlayerID].ToString();
         runner_score_txt.text = gm.GetScores()[runner.PlayerID].ToString();
+
+        // Hide UI behind this page
+        tag_screen.alpha = 0;
     }
     public override void SetOut()
     {
@@ -54,6 +58,9 @@ public class PausePage : MenuPage
         // Balls
         chaser.SetStyle(chaser.PlayerColor);
         runner.SetStyle(Color.white);
+
+        // Unhide UI behind this page
+        tag_screen.alpha = 1;
 
         base.SetOut();
     }
