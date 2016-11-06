@@ -2,31 +2,24 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public enum Power { None, Dash, Blink, Swap, Springs, Warp, Cloak, Repel }
+
 
 public class Pickup : MonoBehaviour
 {
-    private static Power[] order;
-    private static int order_i;
-
     public Text name_text, icon_text;
     public Power power = Power.None;
 
+    private PickupManager manager;
     private Chara user;
 
 
     private void Awake()
     {
-        if (order == null)
-        {
-            Power[] powers = (Power[])Tools.EnumValues(typeof(Power));
-            order = new Power[powers.Length - 1];
-            System.Array.Copy(powers, 1, order, 0, order.Length);
-            order = Tools.ShuffleArray(order);
-            order_i = 0;
-        }
-
+        manager = GetComponentInParent<PickupManager>();
         GameManager.Instance.on_reset += Reset;
+    }
+    private void Start()
+    {
         Spawn();
     }
 
@@ -77,9 +70,7 @@ public class Pickup : MonoBehaviour
     }
     private void Spawn()
     {
-        //power = (Power)Random.Range(1, Tools.EnumLength(typeof(Power)));
-        power = order[order_i];
-        order_i = (order_i + 1) % order.Length;
+        manager.SetPickupPower(this);
 
         GetComponent<Collider2D>().enabled = true;
         name_text.gameObject.SetActive(false);
