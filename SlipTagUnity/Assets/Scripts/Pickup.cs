@@ -44,7 +44,7 @@ public class Pickup : MonoBehaviour
     }
     private IEnumerator RespawnRoutine()
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(5);
         Spawn();
     }
     private void Spawn()

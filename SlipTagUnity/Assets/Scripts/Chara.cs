@@ -47,6 +47,7 @@ public class Chara : MonoBehaviour
 
     // Events
     public Action<Chara, Chara> on_tag;
+    public Action<float> on_bump_wall;
 
 
     // PUBLIC ACCESSORS
@@ -265,6 +266,8 @@ public class Chara : MonoBehaviour
         {
             // Wall collision
 
+            float mag = col.relativeVelocity.magnitude;
+
             // Particles
             ParticleSystem ps = Instantiate(bump_particles_prefab);
             ps.transform.position = transform.position; // col.contacts[0].point;
@@ -275,9 +278,12 @@ public class Chara : MonoBehaviour
             squash_routine = StartCoroutine(Squash(col));
 
             // Cam shake
-            float i = Mathf.Pow(Mathf.Min(col.relativeVelocity.magnitude / 30f, 1), 4);
+            float i = Mathf.Pow(Mathf.Min(mag / 30f, 1), 4);
             i *= i;
             camshake.Shake(Mathf.Lerp(0.05f, 0.1f, i), Mathf.Lerp(0, 0.5f, i), 1);
+
+            // Event
+            if (on_bump_wall != null) on_bump_wall(mag / 30f);
         }
     }
     private void OnTriggerEnter2D(Collider2D collider)
