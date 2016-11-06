@@ -12,7 +12,7 @@ public class Pickup : MonoBehaviour
     public Text name_text, icon_text;
     public Power power = Power.None;
 
-    Chara user;
+    private Chara user;
 
 
     private void Awake()
@@ -62,14 +62,17 @@ public class Pickup : MonoBehaviour
     {
         if (pu != this) Respawn();
     }
-    private void Respawn()
+    private void OnDrop()
     {
         transform.position = user.transform.position;
 
         user.on_use_power -= Respawn;
         user.on_pickup -= OnUserPickupNew;
         user = null;
-
+    }
+    private void Respawn()
+    {
+        OnDrop();
         StartCoroutine(CoroutineUtil.DoAfterDelay(Spawn, 3));
     }
     private void Spawn()
@@ -84,7 +87,9 @@ public class Pickup : MonoBehaviour
     }
     private void Reset()
     {
-        //StopAllCoroutines();
-        //Spawn();
+        StopAllCoroutines();
+
+        if (user != null) OnDrop();
+        Spawn();
     }
 }

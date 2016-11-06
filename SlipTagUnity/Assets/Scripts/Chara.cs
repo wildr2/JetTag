@@ -92,6 +92,7 @@ public class Chara : MonoBehaviour
     public void Setup()
     {
         alive = true;
+        power = Power.None;
 
         if (replay_routine != null) StopCoroutine(replay_routine);
 
@@ -179,10 +180,13 @@ public class Chara : MonoBehaviour
         Chara opponent = gm.charas[1 - PlayerID];
         Vector2 waypoint = Vector2.zero;
 
+        float choose_wp_timer = 0;
+
         while (true)
         {
             while (Time.timeScale == 0) yield return null;
 
+            // Movement
             if (IsChaser())
             {
                 des_move_dir = (opponent.transform.position - transform.position).normalized;
@@ -190,24 +194,35 @@ public class Chara : MonoBehaviour
             }
             else
             {
-                // Choose wp
-                float dist_to_opp = 0;
-                foreach (Vector2 wp in waypoints.Points)
+                choose_wp_timer += Time.deltaTime;
+                if (choose_wp_timer >= 1)
                 {
-                    float dist = Vector2.Distance(wp, opponent.transform.position);
-                    if (dist > dist_to_opp)
+                    // Choose wp
+                    float dist_to_opp = 0;
+                    foreach (Vector2 wp in waypoints.Points)
                     {
-                        waypoint = wp;
-                        dist_to_opp = dist;
+                        float dist = Vector2.Distance(wp, opponent.transform.position);
+                        if (dist > dist_to_opp)
+                        {
+                            waypoint = wp;
+                            dist_to_opp = dist;
+                        }
                     }
+                    choose_wp_timer = 0;
                 }
-
-                for (float t = 0; t < 0.1f; t += Time.deltaTime)
+                des_move_dir = (waypoint - (Vector2)transform.position).normalized;
+                yield return null;
+            } 
+            
+            // Power
+            if (power != Power.None)
+            {
+                if (UnityEngine.Random.value < 0.01f)
                 {
-                    des_move_dir = (waypoint - (Vector2)transform.position).normalized;
-                    yield return null;
+                    UsePower();
                 }
-            }            
+            }
+                   
         }
     }
     private void FixedUpdate()

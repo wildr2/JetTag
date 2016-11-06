@@ -11,7 +11,7 @@ public class MatchUI : MonoBehaviour
     public Transform tag_screen;
     public Text tag_text, tag_continue_text;
 
-    public Text runner_score_txt, chaser_score_txt;
+    public Text score_left, score_right;
 
 
     public void ShowChaseScreen(Chara chaser, Chara runner)
@@ -24,7 +24,7 @@ public class MatchUI : MonoBehaviour
         Vector2 dif = runner.transform.position - chaser.transform.position;
         Vector2 pos = (Vector2)runner.transform.position - dif * 0.25f;
 
-        chase_arrow.transform.position = Camera.main.WorldToScreenPoint(pos);
+        chase_arrow.transform.position = pos;
         chase_arrow.transform.rotation = Quaternion.Euler(0, 0, 
             Mathf.Atan2(dif.y, dif.x) * Mathf.Rad2Deg);
 
@@ -54,22 +54,10 @@ public class MatchUI : MonoBehaviour
         tag_text.color = chaser.PlayerColor;
 
         // Score
-        Debug.logger.logEnabled = false;
-        if (chaser.PlayerID == 0)
-        {
-            chaser_score_txt.rectTransform.localPosition = new Vector3(-500, 0, 0);
-            runner_score_txt.rectTransform.localPosition = new Vector3(500, 0, 0);
-        }
-        else
-        {
-            chaser_score_txt.rectTransform.localPosition = new Vector3(500, 0, 0);
-            runner_score_txt.rectTransform.localPosition = new Vector3(-500, 0, 0);
-        }
-        chaser_score_txt.color = chaser.PlayerColor;
-        chaser_score_txt.text = gm.GetScores()[chaser.PlayerID].ToString();
-        runner_score_txt.text = gm.GetScores()[runner.PlayerID].ToString();
-        Debug.logger.logEnabled = true;
-
+        score_left.color = chaser.PlayerID == 0 ? chaser.PlayerColor : Color.white;
+        score_right.color = chaser.PlayerID == 1 ? chaser.PlayerColor : Color.white;
+        score_left.text = gm.GetScores()[0].ToString();
+        score_right.text = gm.GetScores()[1].ToString();
 
         // Continue text
         tag_continue_text.color = winner.PlayerColor;

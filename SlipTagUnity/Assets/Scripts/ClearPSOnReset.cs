@@ -10,7 +10,8 @@ public class ClearPSOnReset : MonoBehaviour
     }
     private void OnDestroy()
     {
-        GameManager.Instance.on_reset -= Clear;
+        GameManager gm = GameManager.Instance;
+        if (gm != null) gm.on_reset -= Clear;
     }
     private void Clear()
     {
