@@ -16,6 +16,7 @@ public class MatchUI : MonoBehaviour
 
     public void ShowChaseScreen(Chara chaser, Chara runner)
     {
+        GameManager.Instance.HideCourt();
         chase_screen.gameObject.SetActive(true);
         chase_background.color = chaser.PlayerColor;
 
@@ -33,6 +34,7 @@ public class MatchUI : MonoBehaviour
     }
     public void HideChaseScreen(Chara chaser, Chara runner)
     {
+        GameManager.Instance.ShowCourt();
         chase_screen.gameObject.SetActive(false);
 
         // Balls
@@ -45,6 +47,8 @@ public class MatchUI : MonoBehaviour
         GameManager gm = GameManager.Instance;
         Chara chaser = gm.GetChaser();
         Chara runner = gm.GetRunner();
+
+        gm.HideCourt();
 
         tag_screen.gameObject.SetActive(true);
         tag_text.color = chaser.PlayerColor;
@@ -77,6 +81,7 @@ public class MatchUI : MonoBehaviour
     }
     public void HideTagScreen()
     {
+        GameManager.Instance.ShowCourt();
         tag_screen.gameObject.SetActive(false);
     }
 }

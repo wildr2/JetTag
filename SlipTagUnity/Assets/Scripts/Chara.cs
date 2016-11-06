@@ -48,6 +48,8 @@ public class Chara : MonoBehaviour
     // Events
     public Action<Chara, Chara> on_tag;
     public Action<float> on_bump_wall;
+    public Action on_use_power;
+    public Action<Pickup> on_pickup;
 
 
     // PUBLIC ACCESSORS
@@ -293,6 +295,7 @@ public class Chara : MonoBehaviour
         Pickup pu = collider.GetComponent<Pickup>();
         if (pu != null)
         {
+            if (on_pickup != null) on_pickup(pu);
             power = pu.power;
             camshake.Shake(CamShakeType.Strong);
         }
@@ -301,6 +304,8 @@ public class Chara : MonoBehaviour
     private void UsePower()
     {
         if (power == Power.None || !alive || Time.timeScale == 0) return;
+
+        if (on_use_power != null) on_use_power();
 
         if (power == Power.Dash) StartCoroutine(Dash());
         else if (power == Power.Blink) Blink();

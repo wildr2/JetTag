@@ -6,12 +6,26 @@ public enum Power { None, Dash, Blink, Swap, Springs, Warp, Cloak, Repel }
 
 public class Pickup : MonoBehaviour
 {
+    private static Power[] order;
+    private static int order_i;
+
     public Text name_text, icon_text;
     public Power power = Power.None;
+
+    Chara user;
 
 
     private void Awake()
     {
+        if (order == null)
+        {
+            Power[] powers = (Power[])Tools.EnumValues(typeof(Power));
+            order = new Power[powers.Length - 1];
+            System.Array.Copy(powers, 1, order, 0, order.Length);
+            order = Tools.ShuffleArray(order);
+            order_i = 0;
+        }
+
         GameManager.Instance.on_reset += Reset;
         Spawn();
     }
@@ -26,8 +40,10 @@ public class Pickup : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         icon_text.gameObject.SetActive(false);
 
-        // Respawn
-        StartCoroutine(RespawnRoutine());
+        // User
+        user = c;
+        user.on_pickup += OnUserPickupNew;
+        user.on_use_power += Respawn;
 
         // Name text
         string key_name = InputExt.GetControlName(c.PlayerID, Control.Action);
@@ -42,14 +58,25 @@ public class Pickup : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         name_text.gameObject.SetActive(false);
     }
-    private IEnumerator RespawnRoutine()
+    private void OnUserPickupNew(Pickup pu)
     {
-        yield return new WaitForSeconds(5);
-        Spawn();
+        if (pu != this) Respawn();
+    }
+    private void Respawn()
+    {
+        transform.position = user.transform.position;
+
+        user.on_use_power -= Respawn;
+        user.on_pickup -= OnUserPickupNew;
+        user = null;
+
+        StartCoroutine(CoroutineUtil.DoAfterDelay(Spawn, 3));
     }
     private void Spawn()
     {
-        power = (Power)Random.Range(1, Tools.EnumLength(typeof(Power)));
+        //power = (Power)Random.Range(1, Tools.EnumLength(typeof(Power)));
+        power = order[order_i];
+        order_i = (order_i + 1) % order.Length;
 
         GetComponent<Collider2D>().enabled = true;
         name_text.gameObject.SetActive(false);
@@ -57,7 +84,7 @@ public class Pickup : MonoBehaviour
     }
     private void Reset()
     {
-        StopAllCoroutines();
-        Spawn();
+        //StopAllCoroutines();
+        //Spawn();
     }
 }

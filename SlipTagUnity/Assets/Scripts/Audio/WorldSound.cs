@@ -5,6 +5,7 @@ using System.Collections;
 [RequireComponent(typeof(AudioSource))]
 public class WorldSound : MonoBehaviour
 {
+    public bool destroy_on_done = false;
     public bool timescaled_pitch = true;
     public float base_volume = 1;
     public float base_pitch = 1;
@@ -21,7 +22,11 @@ public class WorldSound : MonoBehaviour
         if (timescaled_pitch) GetComponent<AudioSource>().pitch *= Time.timeScale;
 
         // disable when finished
-        if (!GetComponent<AudioSource>().isPlaying) gameObject.SetActive(false);
+        if (!GetComponent<AudioSource>().isPlaying)
+        {
+            if (destroy_on_done) Destroy(gameObject);
+            else gameObject.SetActive(false);
+        }
     }
 
     public void Play()

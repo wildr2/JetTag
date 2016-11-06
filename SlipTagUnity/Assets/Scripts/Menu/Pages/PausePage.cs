@@ -21,9 +21,7 @@ public class PausePage : MenuPage
         Chara chaser = gm.GetChaser();
         Chara runner = gm.GetRunner();
 
-        gm.court.gameObject.SetActive(false);
-        original_background_color = Camera.main.backgroundColor;
-        Camera.main.backgroundColor = Color.white;
+        gm.HideCourt();
 
         // Balls
         chaser.SetStyle(Color.black, null, Color.black);
@@ -52,15 +50,13 @@ public class PausePage : MenuPage
         Chara chaser = gm.GetChaser();
         Chara runner = gm.GetRunner();
 
-        if (gm.State == MatchState.InPlay) gm.court.gameObject.SetActive(true);
-        Camera.main.backgroundColor = original_background_color;
-
         // Balls
         chaser.SetStyle(chaser.PlayerColor);
         runner.SetStyle(Color.white);
 
         // Unhide UI behind this page
         tag_screen.alpha = 1;
+        if (gm.State == MatchState.InPlay) gm.ShowCourt();
 
         base.SetOut();
     }

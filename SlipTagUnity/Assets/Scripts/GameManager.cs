@@ -23,10 +23,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public LayerMask court_mask;
+    private LayerMask normal_mask;
+
     public Chara[] charas;
     public MatchUI match_ui;
-    public Transform court;
-    public Color background_color;
     private static UID ui_timescale_id = new UID();
 
     public MatchState State { get; private set; }
@@ -74,6 +75,15 @@ public class GameManager : MonoBehaviour
         DataManager.Instance.match_stats.Add(stats);
     }
 
+    public void HideCourt()
+    {
+        Camera.main.cullingMask = court_mask;
+    }
+    public void ShowCourt()
+    {
+        Camera.main.cullingMask = normal_mask;
+    }
+
 
     // PRIVATE / PROTECTED MODIFIERS
 
@@ -89,6 +99,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         if (this != _instance) return;
+
+        normal_mask = Camera.main.cullingMask;
 
         DataManager dm = DataManager.Instance;
 
@@ -143,13 +155,11 @@ public class GameManager : MonoBehaviour
 
         // Flash chase screen
         TimeScaleManager.SetFactor(0, ui_timescale_id);
-        court.gameObject.SetActive(false);
         match_ui.ShowChaseScreen(charas[chaser_i], charas[1 - chaser_i]);
 
         yield return StartCoroutine(CoroutineUtil.WaitForRealSeconds(0.5f));
 
         match_ui.HideChaseScreen(GetChaser(), GetRunner());
-        court.gameObject.SetActive(true);
         TimeScaleManager.SetFactor(1, ui_timescale_id);
 
         turn_start_time = Time.timeSinceLevelLoad;
@@ -162,6 +172,8 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator OnTagRoutine(Chara winner)
     {
+        HideCourt();
+
         // Wait for end of turn change if happened on same frame as turn change
         while (State == MatchState.TurnChange) yield return null;
 
@@ -169,9 +181,6 @@ public class GameManager : MonoBehaviour
         State = MatchState.Tagged;
         ++scores[winner.PlayerID];
 
-        
-        court.gameObject.SetActive(false);
-        Camera.main.backgroundColor = background_color;
         yield return new WaitForSeconds(1f);
 
         // Show UI
@@ -187,7 +196,6 @@ public class GameManager : MonoBehaviour
             while (!InputExt.GetKeyDown(winner.PlayerID, Control.Action)) yield return null;
 
         // Hide UI
-        court.gameObject.SetActive(true);
         match_ui.HideTagScreen();
 
         // Reset
