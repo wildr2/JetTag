@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     private int[] scores;
 
     public Action on_reset;
+    public Action<Chara, Chara> on_tag;
 
 
     // PUBLIC ACCESSORS
@@ -167,6 +168,7 @@ public class GameManager : MonoBehaviour
     }
     private void OnTag(Chara tagger, Chara target)
     {
+        if (on_tag != null) on_tag(tagger, target);
         StartCoroutine(OnTagRoutine(tagger));
     }
 
