@@ -106,9 +106,9 @@ public class GameManager : MonoBehaviour
 
         // Cam Shake
         CameraShake camshake = Camera.main.GetComponent<CameraShake>();
-        camshake.DefineShakeType(CamShakeType.Strong, new CamShakeParams(0.1f, 3, 1, 4));
+        camshake.DefineShakeType(CamShakeType.Strong, new CamShakeParams(0.1f, 4, 1, 0));
         camshake.DefineShakeType(CamShakeType.StrongNoF, new CamShakeParams(0.15f, 4, 1, 0));
-        camshake.DefineShakeType(CamShakeType.VeryStrong, new CamShakeParams(0.4f, 6, 1, 5));
+        camshake.DefineShakeType(CamShakeType.VeryStrong, new CamShakeParams(0.4f, 6, 1, 0));
 
         // Characters
         for (int i = 0; i < charas.Length; ++i)

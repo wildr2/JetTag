@@ -7,6 +7,7 @@ public class MatchUI : MonoBehaviour
 {
     public Transform chase_screen;
     public Image chase_arrow, chase_background;
+    public AudioSource chase_sound;
 
     public Transform tag_screen;
     public Text tag_text, tag_continue_text;
@@ -19,6 +20,9 @@ public class MatchUI : MonoBehaviour
         GameManager.Instance.HideCourt();
         chase_screen.gameObject.SetActive(true);
         chase_background.color = chaser.PlayerColor;
+
+        // Sound
+        chase_sound.Play();
 
         // Arrow
         Vector2 dif = runner.transform.position - chaser.transform.position;
