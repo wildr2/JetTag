@@ -27,9 +27,7 @@ public class BackgroundMusic : MonoBehaviour
 
         music.UnPause();
 
-        float duration = Mathf.Max(5, 15 - recent_playtime);
-        Tools.Log(duration + " - " + recent_playtime);
-        
+        float duration = Mathf.Max(5, 15 - recent_playtime);        
 
         if (music.time >= 0.5f)
         {
