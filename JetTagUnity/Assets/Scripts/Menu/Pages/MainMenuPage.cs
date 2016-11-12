@@ -84,6 +84,7 @@ public class MainMenuPage : MenuPage
             if ((ControlScheme)InputExt.GetPlayerScheme(i) == cs)
             {
                 InputExt.SetPlayerControlScheme(i, ControlScheme.AI);
+                SoundManager.PlayClickSound();
                 UpdateControlsText(i);
                 return;
             }
@@ -95,6 +96,7 @@ public class MainMenuPage : MenuPage
             if ((ControlScheme)InputExt.GetPlayerScheme(i) == ControlScheme.AI)
             {
                 InputExt.SetPlayerControlScheme(i, cs);
+                SoundManager.PlayClickSound();
                 UpdateControlsText(i);
                 return;
             }
@@ -115,6 +117,8 @@ public class MainMenuPage : MenuPage
     private void SwitchColor(int player_id, int index_change)
     {
         if (index_change == 0) return;
+
+        SoundManager.PlaySelectSound();
 
         int i = dm.player_color_ids[player_id];
         i = Tools.Mod(i + index_change, dm.color_options.Length);

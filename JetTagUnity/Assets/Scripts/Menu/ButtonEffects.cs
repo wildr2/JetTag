@@ -15,11 +15,13 @@ public class ButtonEffects : ButtonEvents
     protected override void OnClick()
     {
         base.OnClick();
+        SoundManager.PlayClickSound();
         if (text != null) if (text != null) text.text = RemoveArrows(text.text);
     }
     protected override void OnSelect()
     {
         base.OnSelect();
+        SoundManager.PlaySelectSound();
         if (text != null) if (text != null) text.text = AddArrows(text.text);
     }
     protected override void OnDeselect()

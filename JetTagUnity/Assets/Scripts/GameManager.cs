@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 public enum CamShakeType { Strong, StrongNoF, VeryStrong }
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
     private int turn_num = 0;
     private int[] scores;
 
+    public static Action on_scene_load;
     public Action on_reset;
     public Action<Chara, Chara> on_tag;
 
@@ -133,6 +135,14 @@ public class GameManager : MonoBehaviour
                 StartNextTurn();
             }
         }
+    }
+
+    private void OnLoadScene(Scene scene, LoadSceneMode mode)
+    {
+        if (this != _instance) return;
+
+        if (on_scene_load != null) on_scene_load();
+        on_scene_load = null;
     }
 
     private void StartNextTurn()
