@@ -8,7 +8,9 @@ public class OptionsPage : MenuPage
     // Sound Settings
     public Text music_text;
     public Text sound_text;
+
     private SoundManager sm;
+
     private static UID volume_id = new UID();
 
 

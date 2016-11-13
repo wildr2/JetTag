@@ -5,6 +5,8 @@ using System.Collections;
 
 public class MainMenuPage : MenuPage
 {
+    public AudioSource player_change_sound;
+
     public Image[] balls;
     public Text[] controls_text;
     private string controls_text_initial =
@@ -84,7 +86,8 @@ public class MainMenuPage : MenuPage
             if ((ControlScheme)InputExt.GetPlayerScheme(i) == cs)
             {
                 InputExt.SetPlayerControlScheme(i, ControlScheme.AI);
-                SoundManager.PlayClickSound();
+                //SoundManager.PlayClickSound();
+                player_change_sound.Play();
                 UpdateControlsText(i);
                 return;
             }
@@ -96,7 +99,8 @@ public class MainMenuPage : MenuPage
             if ((ControlScheme)InputExt.GetPlayerScheme(i) == ControlScheme.AI)
             {
                 InputExt.SetPlayerControlScheme(i, cs);
-                SoundManager.PlayClickSound();
+                //SoundManager.PlayClickSound();
+                player_change_sound.Play();
                 UpdateControlsText(i);
                 return;
             }
