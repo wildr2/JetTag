@@ -137,11 +137,10 @@ public class MenuPage : MonoBehaviour
     }
     protected virtual void OnInputCancel()
     {
-        //if (sound_on_cancel)
-        //{
-        //    SoundManager sm = SoundManager.TryGetInstance();
-        //    if (sm != null && sm.btn_click != null) sm.btn_click.Play();
-        //}
+        if (sound_on_cancel)
+        {
+            SoundManager.PlayClickSound();
+        }
     }
     protected virtual void OnInputSubmit()
     {

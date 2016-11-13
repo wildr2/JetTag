@@ -31,10 +31,10 @@ public class SoundManager : MonoBehaviour
     public bool dev_mute_all = true;
 
     // Volumes (linear)
-    public static VolumeProduct MasterVolume { get; private set; }
-    public static VolumeProduct MusicVolume { get; private set; }
-    public static VolumeProduct WorldVolume { get; private set; }
-    public static VolumeProduct UIVolume { get; private set; }
+    public VolumeProduct MasterVolume { get; private set; }
+    public VolumeProduct MusicVolume { get; private set; }
+    public VolumeProduct WorldVolume { get; private set; }
+    public VolumeProduct UIVolume { get; private set; }
 
     // UI sounds
     public AudioSource btn_click;

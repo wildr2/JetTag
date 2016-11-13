@@ -16,7 +16,7 @@ public class ButtonEffects : ButtonEvents
     {
         base.OnClick();
         SoundManager.PlayClickSound();
-        if (text != null) if (text != null) text.text = RemoveArrows(text.text);
+        //if (text != null) if (text != null) text.text = RemoveArrows(text.text);
     }
     protected override void OnSelect()
     {
@@ -30,13 +30,17 @@ public class ButtonEffects : ButtonEvents
         if (text != null) text.text = RemoveArrows(text.text);
     }
 
-    private string AddArrows(string s)
+    public static string AddArrows(string s)
     {
         return "> " + s.Trim(new char[] { '>', '<', ' ' }) + " <";
     }
-    private string RemoveArrows(string s)
+    public static string RemoveArrows(string s)
     {
         return s.Trim(new char[] { '>', '<', ' ' });
+    }
+    public static bool HasArrows(string s)
+    {
+        return s != "" && s[0] == '>' && s[s.Length-1] == '<';
     }
 
 }
