@@ -26,7 +26,7 @@ public class Pickup : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collider)
     {
         Chara c = collider.GetComponent<Chara>();
-        StartCoroutine(OnPickup(c));
+        if (c != null) StartCoroutine(OnPickup(c));
     }
     private IEnumerator OnPickup(Chara c)
     {

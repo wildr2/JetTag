@@ -7,6 +7,8 @@ public class MainMenuPage : MenuPage
 {
     public AudioSource player_change_sound;
 
+    public Text court_btn_text;
+
     public Image[] balls;
     public Text[] controls_text;
     private string controls_text_initial =
@@ -57,6 +59,7 @@ public class MainMenuPage : MenuPage
             UpdateControlsText(i);
             UpdateBallColor(i);
         }
+        UpdateCourtButton();
     }
     protected override void Update()
     {
@@ -78,6 +81,7 @@ public class MainMenuPage : MenuPage
             }
         }
     }
+
     private void OnInputStart(ControlScheme cs)
     {
         // Slot already with this cs
@@ -133,6 +137,16 @@ public class MainMenuPage : MenuPage
     private void UpdateBallColor(int player_id)
     {
         balls[player_id].color = dm.color_options[dm.player_color_ids[player_id]];
+    }
+
+    public void OnButtonCourt()
+    {
+        dm.court_type = Tools.NextEnumValue(dm.court_type);
+        UpdateCourtButton();
+    }
+    private void UpdateCourtButton()
+    {
+        court_btn_text.text = dm.court_names[(int)dm.court_type];
     }
 
 }

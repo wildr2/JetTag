@@ -32,6 +32,8 @@ public class Chara : MonoBehaviour
     private Vector2 prev_pos;
     private float speed, normal_speed = 20f;
     private Coroutine squash_routine;
+
+    // AI
     private Waypoints waypoints;
 
     // Replay
@@ -75,7 +77,9 @@ public class Chara : MonoBehaviour
         this.PlayerID = id;
         this.PlayerColor = color;
 
-        start_pos = transform.position;
+        waypoints = CourtManager.court.waypoints;
+
+        start_pos = CourtManager.court.spawn_positions[PlayerID].position;
         Setup();
 
         if ((ControlScheme)InputExt.GetPlayerScheme(id) == ControlScheme.AI)
@@ -152,7 +156,6 @@ public class Chara : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        waypoints = FindObjectOfType<Waypoints>();
         camshake = Camera.main.GetComponent<CameraShake>();
 
         ParticleSystemRenderer psr = smoke_ps.GetComponent<ParticleSystemRenderer>();
@@ -174,46 +177,66 @@ public class Chara : MonoBehaviour
             yield return null;
         }
     }
+
     private IEnumerator UpdateAI()
     {
         GameManager gm = GameManager.Instance;
         Chara opponent = gm.charas[1 - PlayerID];
-        Vector2 waypoint = Vector2.zero;
+        Vector2 move_target = transform.position;
 
-        float choose_wp_timer = 0;
+        float change_target_time = 0;
 
         while (true)
         {
             while (Time.timeScale == 0) yield return null;
 
-            // Movement
+            Vector2 pos = transform.position;
+            Vector2 opos = opponent.transform.position;
+            Vector2 opos_pred = opos + opponent.rb.velocity * 0.5f;
+
+
+            // Chaser
             if (IsChaser())
             {
-                des_move_dir = (opponent.transform.position - transform.position).normalized;
-                yield return null;
+                if (waypoints.HasLOS(pos, opos))
+                {
+                    move_target = opos_pred;
+                }
+                else if (Time.time - change_target_time > 0.1f)
+                {
+                    move_target = waypoints.FindPathNextWP(pos, opos_pred);
+                    change_target_time = Time.time;
+                }
             }
+            // Runner
             else
             {
-                choose_wp_timer += Time.deltaTime;
-                if (choose_wp_timer >= 1)
+                if (Time.time - change_target_time > 0.1f)
                 {
-                    // Choose wp
+                    // Choose waypoint furthest from opp with direct path as move target
                     float dist_to_opp = 0;
                     foreach (Vector2 wp in waypoints.Points)
                     {
-                        float dist = Vector2.Distance(wp, opponent.transform.position);
+                        if (!waypoints.HasLOS(pos, wp)) continue;
+                        Vector2 wp_dir = (wp - pos).normalized;
+                        Vector2 opp_dir = (opos_pred - pos).normalized;
+                        if (Vector2.Angle(wp_dir, opp_dir) < 45f) continue;
+
+                        float dist = Vector2.Distance(wp, opos_pred);
                         if (dist > dist_to_opp)
                         {
-                            waypoint = wp;
+                            move_target = wp;
                             dist_to_opp = dist;
                         }
                     }
-                    choose_wp_timer = 0;
+                    change_target_time = Time.time;
                 }
-                des_move_dir = (waypoint - (Vector2)transform.position).normalized;
-                yield return null;
-            } 
-            
+            }
+
+            // Set move dir
+            des_move_dir = (move_target - pos).normalized;
+            Debug.DrawLine(pos, move_target, Color.red);
+
             // Power
             if (power != Power.None)
             {
@@ -222,9 +245,11 @@ public class Chara : MonoBehaviour
                     UsePower();
                 }
             }
-                   
+
+            yield return null;
         }
     }
+
     private void FixedUpdate()
     {
         if (!alive || Time.timeScale == 0) return;
