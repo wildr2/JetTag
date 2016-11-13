@@ -11,8 +11,8 @@ public class CreditsPage : MenuPage
         float h = scroll.horizontalNormalizedPosition;
         float input = Input.GetAxisRaw("Horizontal");
 
-        scroll.horizontalNormalizedPosition = 
-            Mathf.Clamp01(h + input * Time.deltaTime);
+        scroll.horizontalNormalizedPosition =
+            Mathf.Clamp01(h + (input * Time.deltaTime * 1000) / scroll.content.rect.width);
 
         base.Update();
     }
