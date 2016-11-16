@@ -29,7 +29,6 @@ public class CameraShake : ShakingObj
         StartCoroutine(Freeze(frames));
     }
 
-
     protected override void Awake()
     {
         base.Awake();
